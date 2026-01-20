@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduDash - Login</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
+
+    <style>
+        :root {
+            --primary: #6750A4;
+            --primary-container: #EADDFF;
+            --on-primary-container: #21005D;
+
+            --secondary-container: #E8DEF8;
+            --on-secondary-container: #1D192B;
+
+            --surface: #FEF7FF;
+            --surface-high: #ECE6F0;
+            --on-surface: #1D1B20;
+            --on-surface-variant: #49454F;
+            --outline: #79747E;
+
+            --elevation-2:
+                0px 4px 8px 3px rgba(0,0,0,0.15),
+                0px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fdfbff 0%, #f0ebf8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        /* Card */
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background: #F7F2FA;
+            padding: 32px 28px;
+            border-radius: 24px;
+            box-shadow: var(--elevation-2);
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .icon-container {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            background: var(--primary-container);
+            color: var(--on-primary-container);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--on-surface);
+        }
+
+        .header p {
+            margin-top: 6px;
+            font-size: 0.85rem;
+            color: var(--on-surface-variant);
+        }
+
+        /* Inputs */
+        .input-group {
+            position: relative;
+            margin-bottom: 18px;
+            background: var(--surface-high);
+            border-radius: 6px 6px 0 0;
+            border-bottom: 1px solid var(--outline);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 22px 16px 8px;
+            border: none;
+            background: transparent;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            transform: translateY(-50%);
+            font-size: 0.9rem;
+            color: var(--on-surface-variant);
+            pointer-events: none;
+        }
+
+        .input-group input:focus ~ label,
+        .input-group input:not(:placeholder-shown) ~ label {
+            top: 10px;
+            font-size: 0.7rem;
+            color: var(--primary);
+        }
+
+        /* Subject Section */
+        fieldset {
+            margin: 24px 0;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.6);
+        }
+
+        legend {
+            padding: 0 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .radio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .radio-item {
+            position: relative;
+        }
+
+        .radio-item input {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .radio-visual {
+            padding: 8px 4px;
+            text-align: center;
+            font-size: 0.8rem;
+            border-radius: 10px;
+            border: 1px solid var(--outline);
+            color: var(--on-surface-variant);
+        }
+
+        .radio-item input:checked + .radio-visual {
+            background: var(--secondary-container);
+            color: var(--on-secondary-container);
+            font-weight: 600;
+            border-color: var(--secondary-container);
+        }
+
+        /* Button */
+        .login-button {
+            width: 100%;
+            height: 46px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 100px;
+            background: var(--primary);
+            color: white;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .login-button:hover {
+            background: #553E91;
+            transform: translateY(-1px);
+        }
+
+        /* Footer */
+        .social-login {
+            margin-top: 14px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .social-login a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Mobile */
+        @media (max-width: 480px) {
+            .radio-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-container">
+    <div class="header">
+        <div class="icon-container">
+            <span class="material-symbols-rounded">school</span>
+        </div>
+        <h1>Vistran</h1>
+        <p>Welcome back trainer</p>
+    </div>
+
+    <form action="TrainerLoginServlet" method="post">
+
+        <div class="input-group">
+            <input list="school-list" name="school_name" placeholder=" " required />
+            <label>Search School Name</label>
+            <datalist id="school-list">
+                <option value="Greenwood High School">
+                <option value="St. Xavier's International">
+                <option value="Delhi Public School">
+                <option value="Ryan International">
+                <option value="Sunshine Academy">
+            </datalist>
+        </div>
+
+        <div class="input-group">
+            <input type="text" name="subject_id" placeholder=" " required />
+            <label>Subject ID</label>
+        </div>
+
+        <div class="input-group">
+            <input type="password" name="password" placeholder=" " required />
+            <label>Password</label>
+        </div>
+
+        <fieldset>
+            <legend>Select Subject</legend>
+            <div class="radio-grid">
+                <label class="radio-item">
+                    <input type="radio" name="subject" value="math">
+                    <div class="radio-visual">Math</div>
+                </label>
+                <label class="radio-item">
+                    <input type="radio" name="subject" value="science">
+                    <div class="radio-visual">Science</div>
+                </label>
+                <label class="radio-item">
+                    <input type="radio" name="subject" value="english">
+                    <div class="radio-visual">English</div>
+                </label>
+                <label class="radio-item">
+                    <input type="radio" name="subject" value="hindi">
+                    <div class="radio-visual">Hindi</div>
+                </label>
+                <label class="radio-item">
+                    <input type="radio" name="subject" value="marathi">
+                    <div class="radio-visual">Marathi</div>
+                </label>
+                <label class="radio-item">
+                    <input type="radio" name="subject" value="sst">
+                    <div class="radio-visual">SST</div>
+                </label>
+            </div>
+        </fieldset>
+
+        <button type="submit" class="login-button">
+            Login
+            <span class="material-symbols-rounded">arrow_forward</span>
+        </button>
+
+        <div class="social-login">
+            New to Vistran? <a href="trainersignup.html">Create Account</a>
+        </div>
+
+    </form>
+</div>
+
+</body>
+</html>

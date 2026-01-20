@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vistran - Next Gen School Administration</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+    <style>
+        /* --- Material Design 3 Variables --- */
+        :root {
+            /* Core Colors (M3 Indigo/Blue theme) */
+            --md-sys-color-primary: #385E9D;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-primary-container: #D8E2FF;
+            --md-sys-color-on-primary-container: #001A41;
+            
+            --md-sys-color-secondary: #575E71;
+            --md-sys-color-secondary-container: #DBE2F9;
+            --md-sys-color-on-secondary-container: #141B2C;
+
+            --md-sys-color-tertiary: #715573;
+            --md-sys-color-tertiary-container: #FBD7FC;
+            --md-sys-color-on-tertiary-container: #29132D;
+
+            --md-sys-color-background: #FDFBFF;
+            --md-sys-color-on-background: #1A1C1E;
+            --md-sys-color-surface: #FDFBFF;
+            --md-sys-color-on-surface: #1A1C1E;
+            --md-sys-color-surface-variant: #E1E2EC;
+            --md-sys-color-on-surface-variant: #44474F;
+            
+            --md-sys-color-outline: #74777F;
+            
+            /* Elevations */
+            --md-sys-elevation-1: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+            --md-sys-elevation-2: 0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+
+            /* Shapes */
+            --md-sys-shape-corner-medium: 12px;
+            --md-sys-shape-corner-large: 16px;
+            --md-sys-shape-corner-extra-large: 28px;
+            --md-sys-shape-corner-full: 9999px;
+        }
+
+        /* --- Global Reset & Typography --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            line-height: 1.2;
+            font-weight: 500;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- Components --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 24px;
+            height: 40px;
+            border-radius: var(--md-sys-shape-corner-full);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            gap: 8px;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            box-shadow: var(--md-sys-elevation-1);
+        }
+
+        .btn-primary:hover {
+            box-shadow: var(--md-sys-elevation-2);
+            opacity: 0.95;
+        }
+
+        .card {
+            background-color: var(--md-sys-color-surface);
+            border-radius: var(--md-sys-shape-corner-large);
+            padding: 24px;
+            border: 1px solid var(--md-sys-color-surface-variant); 
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--md-sys-elevation-1);
+        }
+
+        /* --- Header / Navbar --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            position: fixed; /* Fixed to stay on top while scrolling past hero */
+            width: 100%;
+            top: 0;
+            background-color: rgba(253, 251, 255, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--md-sys-color-primary);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+
+        nav a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--md-sys-color-on-surface-variant);
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--md-sys-color-primary);
+        }
+
+        /* --- Hero Section (Full Screen) --- */
+        .hero {
+            height: 100vh; /* Full Viewport Height */
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 24px;
+            background: radial-gradient(circle at 50% 50%, var(--md-sys-color-surface) 0%, var(--md-sys-color-primary-container) 150%);
+            position: relative;
+        }
+
+        .hero-icon-container {
+            width: 80px;
+            height: 80px;
+            background-color: var(--md-sys-color-primary-container);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            color: var(--md-sys-color-on-primary-container);
+        }
+
+        .hero h1 {
+            font-size: 4rem; /* Larger impact */
+            max-width: 900px;
+            margin-bottom: 24px;
+            color: var(--md-sys-color-on-surface);
+            letter-spacing: -0.5px;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 700px;
+            color: var(--md-sys-color-secondary);
+            font-weight: 300;
+        }
+
+        /* Scroll Indicator Animation */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            animation: bounce 2s infinite;
+            color: var(--md-sys-color-primary);
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        /* --- Features Grid --- */
+        .features {
+            padding: 100px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--md-sys-color-background);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .feature-icon span {
+            font-size: 24px;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: 0.95rem;
+        }
+
+        /* --- AI Integration Highlight --- */
+        .ai-section {
+            background-color: var(--md-sys-color-surface-variant);
+            padding: 80px 24px;
+            border-radius: var(--md-sys-shape-corner-extra-large);
+            margin: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .ai-content {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+        }
+
+        .ai-visual {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            background-color: var(--md-sys-color-surface);
+            padding: 32px;
+            border-radius: var(--md-sys-shape-corner-large);
+            box-shadow: var(--md-sys-elevation-1);
+        }
+
+        .chat-bubble {
+            background-color: var(--md-sys-color-secondary-container);
+            color: var(--md-sys-color-on-secondary-container);
+            padding: 12px 16px;
+            border-radius: 16px 16px 16px 4px;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            width: fit-content;
+        }
+        
+        .chat-bubble.bot {
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            border-radius: 16px 16px 4px 16px;
+            margin-left: auto;
+        }
+
+        /* --- Teacher Training Section --- */
+        .training-section {
+            padding: 80px 24px;
+            text-align: center;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--md-sys-color-on-surface);
+            color: var(--md-sys-color-surface);
+            padding: 60px 24px;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 16px;
+            color: var(--md-sys-color-surface-variant);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--md-sys-color-surface);
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+        
+        .created-by {
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.8;
+        }
+        
+        .created-by span {
+            font-weight: 700;
+            color: var(--md-sys-color-primary-container);
+        }
+
+        /* --- Responsive Tweaks --- */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1.1rem;
+            }
+            nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <span class="material-symbols-rounded" style="font-size: 32px; color: var(--md-sys-color-primary);">school</span>
+            Vistran
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#ai">AI Assistant</a></li>
+                <li><a href="#training">Training</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <a href="AdminDashboardServlet" class="btn btn-primary">
+            Admin
+        </a>
+          <a href="trainerlogin.html" class="btn btn-primary">
+            Trainer
+        </a>
+        <a href="login.html" class="btn btn-primary">
+            Get Started
+        </a>
+    </header>
+
+    <section class="hero">
+        <div class="hero-icon-container">
+            <span class="material-symbols-rounded" style="font-size: 40px;">auto_stories</span>
+        </div>
+        <h1>Intelligent Administration.<br>Empowered Educators.</h1>
+        <p>A unified platform connecting school management, teacher growth, and AI-driven insights.</p>
+        
+        <a href="#features" class="scroll-indicator">
+            <span class="material-symbols-rounded" style="font-size: 48px;">keyboard_arrow_down</span>
+        </a>
+    </section>
+
+    <section id="features" class="features">
+        <div class="section-header">
+            <h2>Everything you need to run your campus</h2>
+            <p>From attendance tracking to performance analytics.</p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="feature-icon">
+                    <span class="material-symbols-rounded">bar_chart</span>
+                </div>
+                <h3>Performance Analytics</h3>
+                <p>Visualize student and class performance with dynamic charts. Track trends over time to identify areas for improvement.</p>
+            </div>
+
+            <div class="card">
+                <div class="feature-icon">
+                    <span class="material-symbols-rounded">class</span>
+                </div>
+                <h3>Class Management</h3>
+                <p>Seamless navigation between Class 1 to Class 10. Manage student lists, attendance, and specific class issues effortlessly.</p>
+            </div>
+
+            <div class="card">
+                <div class="feature-icon">
+                    <span class="material-symbols-rounded">campaign</span>
+                </div>
+                <h3>Digital Notice Board</h3>
+                <p>Post and manage school-wide or class-specific notices instantly. Keep staff and students aligned.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="ai" style="padding: 0 24px; max-width: 1248px; margin: 0 auto;">
+        <div class="ai-section">
+            <div class="ai-content">
+                <span style="color: var(--md-sys-color-tertiary); font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Powered by AI</span>
+                <h2 style="font-size: 2.5rem; margin: 16px 0;">Your Intelligent Assistant</h2>
+                <p style="color: var(--md-sys-color-on-surface-variant); margin-bottom: 24px;">
+                    Vistran integrates a powerful AI assistant directly into the admin panel. Solve coding errors, draft notices, or analyze data without leaving the platform.
+                </p>
+                <a href="placeholder.html" class="btn btn-primary">
+                    <span class="material-symbols-rounded">auto_awesome</span>
+                        Try AI Assistant
+                </a>
+            </div>
+            <div class="ai-visual">
+                <div class="chat-bubble">How can I improve class attendance in Grade 5?</div>
+                <div class="chat-bubble bot">Based on the data, Grade 5 attendance drops on Fridays. Consider scheduling engaging activities or quizzes on Friday mornings.</div>
+                <div class="chat-bubble">Draft a notice for the Science Fair.</div>
+                <div class="chat-bubble bot">Sure! "Dear Students, The Annual Science Fair will be held on..."</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="training" class="training-section">
+        <div class="section-header">
+            <h2>Teacher Training Portal</h2>
+            <p>Continuous professional development with our integrated video portal.</p>
+        </div>
+        
+        <div style="display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;">
+            <div class="card" style="max-width: 350px; text-align: left;">
+                <div style="background-color: var(--md-sys-color-surface-variant); height: 180px; border-radius: 12px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                     <img src="https://placehold.co/350x180/E1E2EC/44474F?text=Syllabus+Update+Video" alt="Training Video" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <h3>Curriculum Updates</h3>
+                <p>Video modules explaining the new syllabus changes and teaching methodologies.</p>
+            </div>
+            <div class="card" style="max-width: 350px; text-align: left;">
+                <div style="background-color: var(--md-sys-color-surface-variant); height: 180px; border-radius: 12px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                     <img src="https://placehold.co/350x180/E1E2EC/44474F?text=Classroom+Management" alt="Training Video" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <h3>Classroom Management</h3>
+                <p>Expert tips on managing large classes and fostering a positive learning environment.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="footer-content">
+            <div style="max-width: 300px;">
+                <span class="footer-logo">Vistran</span>
+                <p style="opacity: 0.8;">Empowering educators and administrators with the tools they need to succeed.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#">Training Portal</a></li>
+                    <li><a href="#">AI Tools</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Admin</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="created-by">
+            <p>Created by:</p>
+            <span>Om Chaudhari</span> 
+            <span>Aisha Inamdar</span>
+            <span>Ayush Yadav</span>
+            <span>Shiddhi Bahutule</span>
+
+        </div>
+
+        <div style="text-align: center; margin-top: 24px; font-size: 0.85rem; opacity: 0.6;">
+            &copy; 2026 Vistran. All rights reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
