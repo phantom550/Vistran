@@ -15,29 +15,35 @@
     
     <style>
         :root {
-            /* --- Material Design 3 Color Tokens --- */
-            --md-sys-color-primary: #00639B;
+            /* --- Theme: Patina & Bronze --- */
+            
+            /* Primary (Patina/Deep Teal) */
+            --md-sys-color-primary: #2B6B64;
             --md-sys-color-on-primary: #FFFFFF;
-            --md-sys-color-primary-container: #CEE5FF;
-            --md-sys-color-on-primary-container: #001D33;
+            --md-sys-color-primary-container: #B2EFDF;
+            --md-sys-color-on-primary-container: #00201C;
             
-            --md-sys-color-secondary-container: #DDE3EA;
-            --md-sys-color-on-secondary-container: #1A1C1E;
+            /* Secondary (Bronze/Earth) */
+            --md-sys-color-secondary: #9A6848;
+            --md-sys-color-secondary-container: #FFDBC9;
+            --md-sys-color-on-secondary-container: #361200;
 
-            --md-sys-color-surface: #F8F9FF;
+            /* Surface Colors (Warm/Neutral) */
+            --md-sys-color-surface: #F6F8F7;
             --md-sys-color-surface-container: #FFFFFF;
-            --md-sys-color-surface-container-high: #F2F5FA;
+            --md-sys-color-surface-container-high: #EFF5F3;
             
-            --md-sys-color-outline: #74777F;
-            --md-sys-color-on-surface: #1A1C1E;
-            --md-sys-color-on-surface-variant: #43474E;
+            /* Utils */
+            --md-sys-color-outline: #6F7976;
+            --md-sys-color-on-surface: #191C1B;
+            --md-sys-color-on-surface-variant: #3F4946;
 
-            /* --- Shapes --- */
+            /* Shapes */
             --md-sys-shape-corner-medium: 12px;
             --md-sys-shape-corner-large: 24px;
             --md-sys-shape-corner-full: 100px; 
 
-            /* --- Elevation --- */
+            /* Elevation */
             --md-sys-elevation-1: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
             --md-sys-elevation-3: 0px 4px 8px 3px rgba(0, 0, 0, 0.15);
         }
@@ -52,6 +58,17 @@
             overflow: hidden; 
         }
 
+        /* --- Scrim (Dark Overlay for Mobile) --- */
+        .scrim {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 15;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .scrim.active { display: block; opacity: 1; }
+
         /* --- Sidebar --- */
         .sidebar {
             width: 280px;
@@ -60,8 +77,9 @@
             flex-direction: column;
             padding: 20px 16px;
             overflow-y: auto;
-            border-right: 1px solid #E0E2E0;
-            z-index: 2; 
+            border-right: 1px solid #DCE5E1;
+            z-index: 20; 
+            transition: transform 0.3s ease;
         }
 
         .brand { 
@@ -97,7 +115,7 @@
             font-weight: 500;
         }
         
-        .menu-item:hover { background-color: rgba(0,0,0,0.05); }
+        .menu-item:hover { background-color: rgba(43, 107, 100, 0.08); }
         .menu-item.active { 
             background-color: var(--md-sys-color-primary-container); 
             color: var(--md-sys-color-on-primary-container);
@@ -118,6 +136,9 @@
 
         .content-padding {
             padding: 24px;
+            max-width: 1400px; /* Prevent overly wide content on huge screens */
+            width: 100%;
+            margin: 0 auto;
         }
 
         /* --- Top Bar Chips --- */
@@ -130,7 +151,16 @@
             position: sticky;
             top: 0;
             z-index: 10;
-            border-bottom: 1px solid #E0E2E0;
+            border-bottom: 1px solid #DCE5E1;
+            gap: 16px;
+        }
+
+        .menu-btn {
+            display: none; /* Hidden on Desktop */
+            font-size: 1.5rem;
+            color: var(--md-sys-color-on-surface);
+            cursor: pointer;
+            padding: 8px;
         }
         
         .chips-container {
@@ -139,6 +169,7 @@
             overflow-x: auto;
             padding-bottom: 4px;
             scrollbar-width: none;
+            flex: 1;
         }
         .chips-container::-webkit-scrollbar { display: none; }
 
@@ -207,6 +238,8 @@
             color: var(--md-sys-color-on-secondary-container);
             margin-right: 10px;
         }
+        /* Update graph stroke to Patina */
+        .graph-stroke { stroke: var(--md-sys-color-primary); }
 
         /* --- Charts & List Rows --- */
         .chart-box {
@@ -261,7 +294,10 @@
             font-weight: 500; cursor: pointer;
             display: flex; align-items: center; justify-content: center; gap: 8px;
             width: 100%; height: 40px;
+            transition: background 0.2s;
         }
+        .btn-filled:hover { opacity: 0.9; }
+        
         .btn-tonal {
             background: var(--md-sys-color-secondary-container);
             color: var(--md-sys-color-on-secondary-container);
@@ -296,12 +332,50 @@
         .profile-detail-header { text-align: center; margin-bottom: 20px; }
         .profile-detail-header img { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; }
         .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+
+        /* --- MOBILE RESPONSIVE QUERIES --- */
+        @media (max-width: 768px) {
+            .menu-btn { display: block; }
+            
+            .sidebar {
+                position: fixed;
+                height: 100vh;
+                left: -280px; /* Hide off-screen */
+                box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            }
+            .sidebar.active { transform: translateX(280px); }
+
+            .main-content {
+                border-radius: 0; /* Remove rounded corner on mobile */
+            }
+
+            .top-app-bar { padding: 12px 16px; }
+            .content-padding { padding: 16px; }
+
+            .admin-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            .admin-profile { width: 100%; justify-content: space-between; background: var(--md-sys-color-surface-container-high); }
+
+            .grid-3, .split-grid {
+                grid-template-columns: 1fr; /* Stack into single column */
+                gap: 16px;
+            }
+
+            .card { padding: 16px; }
+            
+            .header-text h2 { font-size: 1.5rem; }
+        }
     </style>
 </head>
 <body>
 
+    <div class="scrim"></div>
+
     <div class="sidebar">
-        <div class="brand"><i class="fa-solid fa-shapes"></i> <span>EduDash</span></div>
+        <div class="brand"><i class="fa-solid fa-shapes"></i> <span>Vistran</span></div>
         
         <div class="sidebar-title">Main Menu</div>
         <a href="#" class="menu-item active"><i class="fa-solid fa-house"></i> Overview</a>
@@ -324,6 +398,8 @@
     <div class="main-content">
         
         <div class="top-app-bar">
+            <i class="fa-solid fa-bars menu-btn" id="menuBtn"></i>
+
             <div class="chips-container">
 <%
     // Current class (default = 1)
@@ -389,7 +465,7 @@
                             <%= request.getAttribute("subject") %>
                         </small>
                     </div>
-                    <img src="https://ui-avatars.com/api/?name=Teacher+User&background=random" alt="Profile" class="admin-img">
+                    <img src="https://ui-avatars.com/api/?name=Teacher+User&background=2B6B64&color=fff&rounded=true" alt="Profile" class="admin-img">
                 </div>
             </div>
 
@@ -434,10 +510,10 @@
                         </div>
                         <i class="fa-solid fa-ellipsis-vertical" style="color:var(--md-sys-color-outline);"></i>
                     </div>
-                     <svg width="100%" height="40" style="margin-top:15px;">
-                        <path d="M0,30 Q30,25 50,15 T100,5" fill="none" stroke="#00639B" stroke-width="3" />
-                     </svg>
-                     <small style="text-align: center; display: block; margin-top: 5px;">Weekly Activity</small>
+                      <svg width="100%" height="40" style="margin-top:15px;">
+                        <path d="M0,30 Q30,25 50,15 T100,5" fill="none" class="graph-stroke" stroke-width="3" />
+                      </svg>
+                      <small style="text-align: center; display: block; margin-top: 5px;">Weekly Activity</small>
                 </div>
             </div>
 
@@ -588,7 +664,7 @@
         <div class="modal-box">
             <h3 class="modal-header">Profile Details</h3>
             <div class="profile-detail-header">
-                <img src="https://ui-avatars.com/api/?name=<%= request.getAttribute("name") %>&background=00639B&color=fff&rounded=true&size=128" alt="Profile">
+                <img src="https://ui-avatars.com/api/?name=<%= request.getAttribute("name") %>&background=2B6B64&color=fff&rounded=true&size=128" alt="Profile">
                 <div style="font-size: 1.25rem; font-weight: 500;">Mr. <%= request.getAttribute("name") %></div>
                 <span style="color: #666;"><%= request.getAttribute("subject") %></span>
             </div>
@@ -681,7 +757,7 @@
         // Initialize Charts
        document.addEventListener('DOMContentLoaded', function () {
 
-    /* ========= SIDEBAR ========= */
+    /* ========= SIDEBAR MOBILE TOGGLE ========= */
     var menuBtn = document.getElementById('menuBtn');
     var sidebar = document.querySelector('.sidebar');
     var scrim = document.querySelector('.scrim');
@@ -707,8 +783,8 @@
                 labels: attendanceData.map((_, i) => 'Student ' + (i + 1)),
                 datasets: [{
                     data: attendanceData,
-                    borderColor: '#0061a4',
-                    backgroundColor: 'rgba(0,97,164,0.15)',
+                    borderColor: '#2B6B64', // Patina color
+                    backgroundColor: 'rgba(43, 107, 100, 0.15)',
                     fill: true,
                     tension: 0.4,
                     pointRadius: 4
@@ -725,10 +801,10 @@
             }
         });
         
+        var avg = Math.round(attendanceData.reduce((a, b) => a + b, 0) / attendanceData.length);
+        var avgElem = document.getElementById('attendanceAvg');
+        if(avgElem) avgElem.innerText = avg + "%";
   }
-    var avg =
-        Math.round(attendanceData.reduce((a, b) => a + b, 0) / attendanceData.length);
-    document.getElementById('attendanceAvg').innerText = avg + "%";
     
             // Performance Chart
             const ctxPerf = document.getElementById('performanceChart');
@@ -740,7 +816,7 @@
                         datasets: [{
                             label: 'Score',
                             data: performanceData.length ? performanceData : [70, 85, 60, 90, 75],
-                            backgroundColor: '#00639B',
+                            backgroundColor: '#2B6B64', // Patina color
                             borderRadius: 4
                         }]
                     },

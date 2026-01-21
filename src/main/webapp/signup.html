@@ -1,141 +1,270 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
-
-<html>
-
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup - Vistran</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
+    <style>
+        /* --- Patina & Bronze Theme Variables --- */
+        :root {
+            /* Patina (Greens/Teals) */
+            --patina-dark: #134E4A;
+            --patina-mid: #2D7A7B;
+            --patina-light: #99F6E4;
+            
+            /* Bronze/Copper */
+            --copper-dark: #78350F;
+            --copper-mid: #B45309;
+            --copper-light: #F59E0B;
+            
+            /* Surface & Text */
+            --text-main: #132A28;
+            --text-muted: #4A6360;
+            --bg-page: #F2F7F6;
+            
+            /* Glassmorphism */
+            --surface-glass: rgba(255, 255, 255, 0.9);
+            --surface-glass-border: rgba(45, 122, 123, 0.15);
+            --shadow-soft: 0 10px 30px -10px rgba(19, 78, 74, 0.15);
+        }
 
-<meta charset="UTF-8">
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-page);
+            /* Soft Mesh Background */
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(153, 246, 228, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(253, 230, 138, 0.2) 0%, transparent 40%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-<link rel="stylesheet" href="signup.css">
+        /* --- Glass Container --- */
+        .login-container {
+            width: 100%;
+            max-width: 450px; /* Slightly wider for signup forms */
+            background: var(--surface-glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--surface-glass-border);
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: var(--shadow-soft);
+        }
 
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        /* --- Header Styling --- */
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 700;
+            /* Gradient Text: Patina to Copper */
+            background: linear-gradient(135deg, var(--patina-mid) 0%, var(--copper-mid) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
+        /* --- Input Groups --- */
+        .input-group {
+            margin-bottom: 20px;
+        }
 
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
 
-<title>Login</title>
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background: rgba(255,255,255,0.8);
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            color: var(--text-main);
+        }
 
+        /* Input Focus State */
+        .input-group input:focus {
+            border-color: var(--patina-mid);
+            box-shadow: 0 0 0 3px rgba(45, 122, 123, 0.1);
+        }
 
+        /* --- Subject Radio Grid --- */
+        .radio-subject {
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+            background: rgba(255,255,255,0.5);
+        }
+
+        .radio-subject legend {
+            padding: 0 10px;
+            color: var(--patina-dark);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Friendly Grid for Radios */
+        .radio-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Two columns */
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px;
+        }
+
+        .radio-item label {
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        input[type="radio"] {
+            accent-color: var(--copper-mid); /* Copper radio buttons */
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        /* --- Submit Button --- */
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--patina-dark) 0%, var(--patina-mid) 100%);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(19, 78, 74, 0.2);
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(19, 78, 74, 0.3);
+            background: linear-gradient(135deg, var(--patina-mid) 0%, var(--patina-dark) 100%);
+        }
+
+        /* --- Social / Footer --- */
+        .social-login {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .social-login a {
+            color: var(--copper-mid);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .social-login a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile Tweak for tiny screens */
+        @media (max-width: 350px) {
+            .radio-grid { grid-template-columns: 1fr; } /* Stack radios on tiny screens */
+        }
+    </style>
 </head>
-
 
 <body>
 
+    <div class="login-container">
+        <h2>Signup</h2>
 
-<div class="login-container">
-
-    <h2 style="color: rgb(255, 128, 192);">Signup</h2>
-
-    <form class="login-form" action="SignupServlet" method="post">
-    
-    <div class="input-group">
-
-            <label for="id">School ID</label>
-
-            <input type="text" id="id" name="school_id" required>
-
-        </div>
-    
-    <div class="input-group">
-
-            <label for="id">School Name</label>
-
-            <input type="text" id="id" name="school_name" required>
-
-        </div>
-    
-
-        <div class="input-group">
-
-            <label for="id">Subject ID</label>
-
-            <input type="text" id="id" name="id" required>
-
-        </div>
-
-        <div class="input-group">
-
-            <label for="password">Password</label>
-
-            <input type="password" id="password" name="password" required>
-
-        </div>
-
-        <fieldset class="radio-subject">
-
-            <legend>Subject</legend>
-
-            <div>
-
-                <input type="radio" id="math" name="subject" value="math">
-
-                <label for="math">Math</label>
-
+        <form class="login-form" action="SignupServlet" method="post">
+            
+            <div class="input-group">
+                <label for="school_id">School ID</label>
+                <input type="text" id="school_id" name="school_id" required placeholder="e.g. SCH-123">
+            </div>
+            
+            <div class="input-group">
+                <label for="school_name">School Name</label>
+                <input type="text" id="school_name" name="school_name" required placeholder="e.g. St. Xavier's">
             </div>
 
-            <div>
-
-                <input type="radio" id="science" name="subject" value="science">
-
-                <label for="science">Science</label>
-
+            <div class="input-group">
+                <label for="subject_id">Subject ID</label>
+                <input type="text" id="subject_id" name="id" required placeholder="e.g. SUB-001">
             </div>
 
-            <div>
-
-                <input type="radio" id="english" name="subject" value="english">
-
-                <label for="english">English</label>
-
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Create a password">
             </div>
 
-            <div>
+            <fieldset class="radio-subject">
+                <legend>Subject</legend>
+                
+                <div class="radio-grid">
+                    <div class="radio-item">
+                        <input type="radio" id="math" name="subject" value="math">
+                        <label for="math">Math</label>
+                    </div>
 
-                <input type="radio" id="hindi" name="subject" value="hindi">
+                    <div class="radio-item">
+                        <input type="radio" id="science" name="subject" value="science">
+                        <label for="science">Science</label>
+                    </div>
 
-                <label for="hindi">Hindi</label>
+                    <div class="radio-item">
+                        <input type="radio" id="english" name="subject" value="english">
+                        <label for="english">English</label>
+                    </div>
 
+                    <div class="radio-item">
+                        <input type="radio" id="hindi" name="subject" value="hindi">
+                        <label for="hindi">Hindi</label>
+                    </div>
+
+                    <div class="radio-item">
+                        <input type="radio" id="marathi" name="subject" value="marathi">
+                        <label for="marathi">Marathi</label>
+                    </div>
+
+                    <div class="radio-item">
+                        <input type="radio" id="sst" name="subject" value="sst">
+                        <label for="sst">SST</label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <button type="submit" class="login-button">Signup</button>
+
+            <div class="social-login">
+                <p>Have an account? <a href="login.html">Login</a></p>
             </div>
 
-            <div>
-
-                <input type="radio" id="marathi" name="subject" value="marathi">
-
-                <label for="marathi">Marathi</label>
-
-            </div>
-
-            <div>
-
-                <input type="radio" id="sst" name="subject" value="sst">
-
-                <label for="sst">Sst</label>
-
-            </div>
-
-        </fieldset>
-
-      <button type="submit" class="login-button">Signup</button>
-
-        <div class="social-login">
-
-            <p>Have an account? <a href="login.html">Login</a></p>
-
-        </div>
-
-    </form>
-
-</div>
-
-
+        </form>
+    </div>
 
 </body>
-
-
 </html>
