@@ -132,6 +132,6 @@ The system follows a pure **Java MVC (Model-View-Controller)** architecture:
 | Name | Role | Links |
 | :--- | :--- | :--- |
 | **Om Chaudhari** | Developer | [GitHub](https://github.com/om0709) |
-| **Ayush Yadav** | Developer | [LinkedIn](https://linkedin.com/in/ayush-yadav-333b72294) |
+| **Ayush Yadav** | Developer | [GitHub](https://github.com/phantom550) |
 | **Siddhi Bahutule** | Developer | [GitHub](https://github.com/siddhivilas26) |
 | **Aisha Inamdar** | Developer | [GitHub](https://github.com/BUGBUSTER11) |
