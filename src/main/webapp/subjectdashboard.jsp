@@ -67,7 +67,10 @@
             backdrop-filter: blur(10px); padding: 20px; display: flex; flex-direction: column; gap: 10px;
             transition: transform 0.3s ease, width 0.3s ease; overflow-y: auto; flex-shrink: 0;
         }
+        
+        /* Desktop Collapse State */
         .sidebar.collapsed { width: 0; padding: 20px 0; overflow: hidden; border: none; }
+        
         .sidebar h3 { color: var(--copper-dark); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; padding-left: 5px; opacity: 0.7; }
         
         .class-btn {
@@ -79,10 +82,6 @@
         /* --- CONTENT AREA --- */
         .content-area { flex: 1; padding: 20px; display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 20px; overflow: hidden; }
         
-        @media (max-width: 1000px) {
-            .content-area { grid-template-columns: 1fr; overflow-y: auto; }
-        }
-
         .section-panel {
             background: var(--surface-glass); border: 1px solid var(--surface-border); border-radius: 20px; padding: 20px;
             box-shadow: 0 8px 32px rgba(19, 78, 74, 0.05); display: flex; flex-direction: column; height: 100%; overflow: hidden;
@@ -136,6 +135,32 @@
         .notice-card p { font-size: 0.9rem; font-weight: 500; color: var(--text-main); margin-bottom: 6px; }
         .notice-date { font-size: 0.75rem; color: var(--text-muted); display: block; text-align: right; font-weight: 600; }
 
+        /* --- RESPONSIVE & MOBILE FIX --- */
+        @media (max-width: 1000px) {
+            .content-area { grid-template-columns: 1fr; overflow-y: auto; }
+            
+            /* Hide sidebar off-screen by default on mobile */
+            .sidebar {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                z-index: 1000;
+                transform: translateX(-100%);
+                box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+            }
+
+            /* Show sidebar when active class is added */
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            /* Reset collapsed state styles if screen was resized */
+            .sidebar.collapsed {
+                width: var(--sidebar-width);
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -146,7 +171,7 @@
         <div class="nav-subject"><%= request.getAttribute("subject") %> Training</div>
     </div>
     <div class="profile-container">
-        <span>Employee ID: <%= request.getAttribute("subject_id") %></span>
+        <span>Subject ID: <%= request.getAttribute("subject_id") %></span>
         <img src="https://ui-avatars.com/api/?name=Teacher&background=2D7A7B&color=fff" alt="Profile" class="profile-photo">
     </div>
 </nav>
@@ -238,17 +263,26 @@
 <script>
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
+        
+        // Check if we are on mobile (<= 1000px)
         if (window.innerWidth <= 1000) {
+            // Mobile behavior: Slide in/out
             sidebar.classList.toggle('active');
         } else {
+            // Desktop behavior: Collapse width
             sidebar.classList.toggle('collapsed');
         }
     }
 
-    // Auto-close sidebar on mobile after clicking a class
+    // Handle Resize Events: Reset classes to prevent layout bugs
     window.addEventListener('resize', () => {
+        const sidebar = document.getElementById('sidebar');
         if (window.innerWidth > 1000) {
-            document.getElementById('sidebar').classList.remove('active');
+            // Moving to Desktop: Remove mobile active state
+            sidebar.classList.remove('active');
+        } else {
+            // Moving to Mobile: Remove desktop collapsed state
+            sidebar.classList.remove('collapsed');
         }
     });
 </script>
