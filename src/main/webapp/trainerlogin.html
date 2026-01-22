@@ -262,9 +262,10 @@
     <form action="TrainerLoginServlet" method="post">
 
         <div class="input-group">
-            <input list="school-list" id="school_name" name="school_name" placeholder=" " required />
+            <input list="school-list" id="school_name" name="school_name" placeholder="s.m.joshi" required />
             <label for="school_name">Search School Name</label>
             <datalist id="school-list">
+            <option value="s.m.joshi">
                 <option value="Greenwood High School">
                 <option value="St. Xavier's International">
                 <option value="Delhi Public School">
@@ -274,12 +275,12 @@
         </div>
 
         <div class="input-group">
-            <input type="text" id="subject_id" name="subject_id" placeholder=" " required />
+            <input type="text" id="subject_id" name="subject_id" placeholder="101" required />
             <label for="subject_id">Subject ID</label>
         </div>
 
         <div class="input-group">
-            <input type="password" id="password" name="password" placeholder=" " required />
+            <input type="password" id="password" name="password" placeholder="123" required />
             <label for="password">Password</label>
         </div>
 
@@ -287,7 +288,7 @@
             <legend>Select Subject</legend>
             <div class="radio-grid">
                 <label class="radio-item">
-                    <input type="radio" name="subject" value="math">
+                    <input type="radio" name="subject" value="math" checked>
                     <div class="radio-visual">Math</div>
                 </label>
                 <label class="radio-item">

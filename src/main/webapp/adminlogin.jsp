@@ -143,12 +143,12 @@
             
             <div class="input-group">
                 <label for="id">Admin ID</label>
-                <input type="text" id="id" name="school_id" placeholder="Enter your ID" required>
+                <input type="text" id="id" name="school_id" placeholder="abc" required>
             </div>
              
             <div class="input-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="********"required>
+                <input type="password" id="password" name="password" placeholder="123"required>
             </div>
 
             <button type="submit" class="login-button">
