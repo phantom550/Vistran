@@ -56,8 +56,13 @@ public class TrainerLoginServlet extends HttpServlet {
                 String dbPassword = rs.getString("password");
 
                 if (dbPassword.equals(password)) {
-                    res.getWriter().println("Login Successful");
-                } else {
+                	   HttpSession session = req.getSession();
+                       session.setAttribute("school_id", school_id);
+                       session.setAttribute("school_name", school_name);
+                       session.setAttribute("subject_name", subject);
+                       session.setAttribute("subject_id", subject_id);
+
+                       req.getRequestDispatcher("/TrainerSubjectDashboardServlet").forward(req, res);                } else {
                     res.getWriter().println("Invalid Password");
                 }
             } else {
@@ -76,13 +81,7 @@ public class TrainerLoginServlet extends HttpServlet {
 	        e.printStackTrace();
 	    }
 		
-        HttpSession session = req.getSession();
-        session.setAttribute("school_id", school_id);
-        session.setAttribute("school_name", school_name);
-        session.setAttribute("subject_name", subject);
-        session.setAttribute("subject_id", subject_id);
-
-        req.getRequestDispatcher("/TrainerSubjectDashboardServlet").forward(req, res);
+     
 		
 	}
 

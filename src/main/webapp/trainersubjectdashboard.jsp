@@ -387,7 +387,7 @@
                     <h3><i class="fa-solid fa-video" style="color:var(--patina-mid); margin-right:10px;"></i> Add Video Link</h3>
                 </div>
                 
-                <form action="AddVideosTrainerDashboardServlet" method="get">
+                <form action="AddVideosTrainerDashboardServlet" method="post">
                     <input type="hidden" name="subject_id" value="<%= request.getAttribute("subject_id") %>">
 
                     <div class="md-input-group">

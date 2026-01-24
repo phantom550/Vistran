@@ -623,7 +623,7 @@
                         <h3>Add Video Link</h3>
                     </div>
                     
-                    <form action="AddVideosTrainerDashboardServlet" method="get">
+                    <form action="AddVideoTrainerClassesServlet" method="get">
                         <input type="hidden" name="subject_id" value="<%= request.getAttribute("subject_id") %>">
 
                         <div class="md-input-group">

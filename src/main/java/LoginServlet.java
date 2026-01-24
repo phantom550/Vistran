@@ -59,7 +59,15 @@ public class LoginServlet extends HttpServlet {
                 String dbPassword = rs.getString("password");
 
                 if (dbPassword.equals(password)) {
-                    res.getWriter().println("Login Successful");
+                	  HttpSession session = req.getSession();
+                      session.setAttribute("school_id", school_id);
+                      session.setAttribute("school_name", school_name);
+
+
+                      
+                      req.setAttribute("subject",subject);
+                      req.setAttribute("subject_id",idStr);
+                      req.getRequestDispatcher("/SubjectDashboardServlet").forward(req, res);
                 } else {
                     res.getWriter().println("Invalid Password");
                 }
@@ -70,16 +78,7 @@ public class LoginServlet extends HttpServlet {
             rs.close();
             st.close();
             
-            HttpSession session = req.getSession();
-            session.setAttribute("school_id", school_id);
-            session.setAttribute("school_name", school_name);
-
-
-            
-            req.setAttribute("subject",subject);
-            req.setAttribute("subject_id",idStr);
-            req.getRequestDispatcher("/SubjectDashboardServlet").forward(req, res);
-
+           
 
         } catch (Exception e) {
             e.printStackTrace();
