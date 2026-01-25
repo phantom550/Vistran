@@ -47,7 +47,7 @@
 
         h1, h2, h3 { line-height: 1.1; font-weight: 700; letter-spacing: -0.5px; }
         a { text-decoration: none; color: inherit; transition: 0.3s ease; }
-        img { max-width: 100%; display: block; } /* Ensures images don't overflow */
+        img { max-width: 100%; display: block; }
 
         /* --- GRADIENT UTILITIES --- */
         .text-gradient {
@@ -69,7 +69,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 0 24px; /* Reduced padding slightly for mobile fit */
+            padding: 0 24px;
             height: 44px;
             border-radius: 50px;
             font-size: 0.9rem;
@@ -80,7 +80,7 @@
             gap: 8px;
             position: relative;
             overflow: hidden;
-            white-space: nowrap; /* Prevent text wrapping inside buttons */
+            white-space: nowrap;
         }
 
         .btn-primary {
@@ -145,7 +145,7 @@
             font-size: 1.3rem;
             font-weight: 700;
             color: #CCFBF1;
-            flex-shrink: 0; /* Prevent logo form shrinking */
+            flex-shrink: 0;
         }
         
         .logo .material-symbols-rounded {
@@ -183,7 +183,7 @@
             box-shadow: none;
             height: 38px;
             font-size: 0.85rem;
-            padding: 0 16px; /* Slightly tighter padding for header buttons */
+            padding: 0 16px;
         }
         header .btn-primary:hover {
             background: #CCFBF1;
@@ -232,7 +232,7 @@
             display: flex;
             gap: 16px;
             margin-bottom: 60px;
-            flex-wrap: wrap; /* Allow buttons to stack on very small screens */
+            flex-wrap: wrap;
             justify-content: center;
         }
 
@@ -268,7 +268,6 @@
 
         .grid {
             display: grid;
-            /* Changed minmax to 280px to fit smaller phones without scrolling */
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 24px;
         }
@@ -306,7 +305,7 @@
         .ai-text {
             flex: 1;
             padding: 60px;
-            min-width: 300px; /* Reduced min-width for mobile */
+            min-width: 300px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -316,7 +315,7 @@
             flex: 1;
             background: linear-gradient(135deg, var(--patina-dark) 0%, var(--patina-mid) 100%);
             padding: 60px;
-            min-width: 300px; /* Reduced min-width for mobile */
+            min-width: 300px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -343,7 +342,6 @@
         }
 
         /* --- TRAINING SECTION --- */
-        /* Replaced fixed width with responsive classes */
         .training-card {
             width: 100%;
             max-width: 380px; 
@@ -435,7 +433,7 @@
         .team-names {
             display: flex;
             justify-content: center;
-            gap: 10px; /* Reduced gap for mobile wrapping */
+            gap: 10px;
             margin-top: 10px;
             flex-wrap: wrap;
         }
@@ -449,25 +447,77 @@
             border: 1px solid rgba(255,255,255,0.05);
         }
 
+        /* --- VIDEO MODAL STYLES --- */
+        .video-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px; /* Padding for mobile edges */
+        }
+
+        .video-modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            background: #000;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            line-height: 0;
+            overflow: hidden; /* Contains video corners */
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for better visibility on mobile */
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: background 0.2s;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--patina-light);
+        }
+
         /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 768px) {
-            /* Adjust Hero Typography */
             .hero h1 { font-size: 2.8rem; }
             .hero p { font-size: 1.1rem; }
-            
-            /* Hide Nav Links on Mobile, keep buttons */
             nav { display: none; }
-            
-            /* Make AI Section Stack Vertically */
             .ai-container { flex-direction: column; }
             .ai-text, .ai-demo { padding: 40px 24px; min-width: 100%; }
-            
-            /* Ensure Buttons stack if needed */
             .hero-btns { flex-direction: column; width: 100%; }
             .hero-btns .btn { width: 100%; }
-            
-            /* Footer Adjustments */
             .footer-content { flex-direction: column; gap: 30px; }
+            
+            /* Modal adjustments for small screens */
+            .modal-content { width: 100%; }
         }
     </style>
 </head>
@@ -504,7 +554,9 @@
         
         <div class="hero-btns">
             <a href="adminlogin.jsp" class="btn btn-primary">Get Started Now</a>
-            <button class="btn btn-outline" style="background: white; color: var(--patina-dark); border: 1px solid rgba(19, 78, 74, 0.2);">View Demo</button>
+            <button class="btn btn-outline" style="background: white; color: var(--patina-dark); border: 1px solid rgba(19, 78, 74, 0.2);" onclick="openDemoModal()">
+                <span class="material-symbols-rounded">play_circle</span> View Demo
+            </button>
         </div>
 
         <a href="#features" class="scroll-indicator">
@@ -637,6 +689,51 @@
             </div>
         </div>
     </footer>
+
+    <div id="demoModal" class="video-modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeDemoModal()" aria-label="Close demo video">&times;</button>
+            <video id="demoVideo" width="100%" controls controlsList="nodownload">
+                <source src="videos/demo.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        function openDemoModal() {
+            const modal = document.getElementById('demoModal');
+            const video = document.getElementById('demoVideo');
+            if(modal && video) {
+                modal.classList.add('show');
+                // Use a promise to handle play() errors (common in some browsers)
+                var playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log("Auto-play prevented by browser policy:", error);
+                    });
+                }
+            }
+        }
+
+        function closeDemoModal() {
+            const modal = document.getElementById('demoModal');
+            const video = document.getElementById('demoVideo');
+            if(modal && video) {
+                modal.classList.remove('show');
+                video.pause();
+                video.currentTime = 0; 
+            }
+        }
+
+        // Close modal if user clicks outside the content area
+        window.onclick = function(event) {
+            const modal = document.getElementById('demoModal');
+            if (event.target == modal) {
+                closeDemoModal();
+            }
+        }
+    </script>
 
 </body>
 </html>
