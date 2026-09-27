@@ -1,4 +1,4 @@
--- Clean up existing tables
+-- Completely wipe any existing broken tables
 DROP TABLE IF EXISTS issue_responses CASCADE;
 DROP TABLE IF EXISTS teacher_issues CASCADE;
 DROP TABLE IF EXISTS trainer_college_mapping CASCADE;
@@ -15,14 +15,13 @@ DROP TABLE IF EXISTS classes CASCADE;
 DROP TABLE IF EXISTS admins CASCADE;
 DROP TABLE IF EXISTS training_modules CASCADE;
 
--- ------------------------------------------------------
--- Base Tables (No Foreign Keys)
--- ------------------------------------------------------
+CREATE EXTENSION IF NOT EXISTS citext;
 
+-- Recreate Base Tables correctly for PostgreSQL
 CREATE TABLE admins (
   admin_id SERIAL PRIMARY KEY,
   admin_name VARCHAR(100) NOT NULL,
-  email VARCHAR(100) UNIQUE,
+  email CITEXT UNIQUE,
   password VARCHAR(255) NOT NULL,
   role VARCHAR(30) DEFAULT NULL
 );
@@ -65,39 +64,40 @@ INSERT INTO colleges (college_id, college_name, district, address) VALUES
 CREATE TABLE login (
   subject_id INT PRIMARY KEY,
   password VARCHAR(10) DEFAULT NULL,
-  subject VARCHAR(10) DEFAULT NULL,
+  subject VARCHAR(20) DEFAULT NULL,
   school_id INT DEFAULT NULL,
   school_name VARCHAR(45) DEFAULT NULL
 );
 
+-- Note: Corrected standard spelling to match Java
 INSERT INTO login (subject_id, password, subject, school_id, school_name) VALUES 
-(101,'123','Math',111,'s.m.joshi'),
-(102,'123','Science',111,'s.m.joshi'),
-(103,'123','sst',111,'s.m.joshi'),
-(104,'123','English',111,'s.m.joshi'),
-(105,'123','Science',111,'s.m.joshi'),
-(106,'123','History',111,'s.m.joshi'),
-(107,'123','Geography',111,'s.m.joshi'),
-(108,'123','Art',111,'s.m.joshi'),
-(109,'123','PE',111,'s.m.joshi'),
-(110,'123','Computer',111,'s.m.joshi'),
-(111,'123','marathi',111,'s.m.joshi'),
+(101,'123','Math',111,'S.M. Joshi'),
+(102,'123','Science',111,'S.M. Joshi'),
+(103,'123','SST',111,'S.M. Joshi'),
+(104,'123','English',111,'S.M. Joshi'),
+(105,'123','Science',111,'S.M. Joshi'),
+(106,'123','History',111,'S.M. Joshi'),
+(107,'123','Geography',111,'S.M. Joshi'),
+(108,'123','Art',111,'S.M. Joshi'),
+(109,'123','PE',111,'S.M. Joshi'),
+(110,'123','Computer',111,'S.M. Joshi'),
+(111,'123','Marathi',111,'S.M. Joshi'),
 (112,'123','Hindi',111,'S.M. Joshi');
 
 CREATE TABLE trainers (
   trainer_id SERIAL PRIMARY KEY,
   trainer_name VARCHAR(100) NOT NULL,
-  email VARCHAR(100) UNIQUE,
+  email CITEXT UNIQUE,
   password VARCHAR(255) NOT NULL,
   designation VARCHAR(50) DEFAULT NULL,
   status VARCHAR(20) DEFAULT 'ACTIVE',
   subject_id INT DEFAULT NULL,
-  subject_name VARCHAR(15) DEFAULT NULL
+  subject_name VARCHAR(20) DEFAULT NULL
 );
 
 INSERT INTO trainers (trainer_id, trainer_name, email, password, designation, status, subject_id, subject_name) VALUES 
-(1,'kuch toh hai','siddhivilas26@gmail.com','123','Trainer','Active',101,'math'),
-(2,'Aryan','aryan1109@gmail.com','123','Trainer','Active',102,'science'),
+(1,'kuch toh hai','siddhivilas26@gmail.com','123','Trainer','ACTIVE',101,'Math'),
+(2,'Aryan','aryan1109@gmail.com','123','Trainer','ACTIVE',102,'Science'),
 (3,'Meena Deshmukh','meena.d@diet.gov.in','trainer@123','English Trainer','ACTIVE',104,'English'),
 (4,'Rahul Pawar','rahul.p@diet.gov.in','trainer@123','History Trainer','ACTIVE',106,'History'),
 (5,'Kavita Joshi','kavita.j@diet.gov.in','trainer@123','Geography Trainer','ACTIVE',107,'Geography'),
@@ -106,7 +106,7 @@ INSERT INTO trainers (trainer_id, trainer_name, email, password, designation, st
 (8,'Prakash Jadhav','prakash.j@diet.gov.in','trainer@123','EVS Trainer','ACTIVE',109,'PE'),
 (9,'Sunita Kale','sunita.k@diet.gov.in','trainer@123','Marathi Trainer','ACTIVE',102,'Marathi'),
 (10,'Vijay Patankar','vijay.p@diet.gov.in','trainer@123','Hindi Trainer','ACTIVE',103,'Hindi'),
-(11,'Ramesh Patil','ramesh.p@diet.gov.in','trainer@123','Math Trainer','ACTIVE',101,'Mathematics'),
+(11,'Ramesh Patil','ramesh.p@diet.gov.in','trainer@123','Math Trainer','ACTIVE',101,'Math'),
 (12,'Shubhangi Desai','shubhangi.d@diet.gov.in','trainer@123','Science Trainer','ACTIVE',105,'Science'),
 (13,'Deepak More','deepak.m@diet.gov.in','trainer@123','English Trainer','ACTIVE',104,'English'),
 (14,'Poonam Chavan','poonam.c@diet.gov.in','trainer@123','History Trainer','ACTIVE',106,'History'),
@@ -116,7 +116,7 @@ INSERT INTO trainers (trainer_id, trainer_name, email, password, designation, st
 (18,'Asha Pawar','asha.p@diet.gov.in','trainer@123','EVS Trainer','ACTIVE',109,'PE'),
 (19,'Mahesh Patankar','mahesh.p@diet.gov.in','trainer@123','Marathi Trainer','ACTIVE',102,'Marathi'),
 (20,'Pallavi Jadhav','pallavi.j@diet.gov.in','trainer@123','Hindi Trainer','ACTIVE',103,'Hindi'),
-(21,'Kiran Patil','kiran.p@diet.gov.in','trainer@123','Math Trainer','ACTIVE',101,'Mathematics'),
+(21,'Kiran Patil','kiran.p@diet.gov.in','trainer@123','Math Trainer','ACTIVE',101,'Math'),
 (22,'Snehal Deshmukh','snehal.d@diet.gov.in','trainer@123','Science Trainer','ACTIVE',105,'Science'),
 (23,'Rohit Kulkarni','rohit.k@diet.gov.in','trainer@123','English Trainer','ACTIVE',104,'English'),
 (24,'Seema More','seema.m@diet.gov.in','trainer@123','History Trainer','ACTIVE',106,'History'),
@@ -126,7 +126,7 @@ INSERT INTO trainers (trainer_id, trainer_name, email, password, designation, st
 (28,'Rekha Pawar','rekha.p@diet.gov.in','trainer@123','EVS Trainer','ACTIVE',109,'PE'),
 (29,'Pravin Chavan','pravin.c@diet.gov.in','trainer@123','Marathi Trainer','ACTIVE',102,'Marathi'),
 (30,'Nisha Kulkarni','nisha.k@diet.gov.in','trainer@123','Hindi Trainer','ACTIVE',103,'Hindi'),
-(31,'Ganesh Patil','ganesh.p@diet.gov.in','trainer@123','Math Trainer','ACTIVE',101,'Mathematics'),
+(31,'Ganesh Patil','ganesh.p@diet.gov.in','trainer@123','Math Trainer','ACTIVE',101,'Math'),
 (32,'Aarti Desai','aarti.d@diet.gov.in','trainer@123','Science Trainer','ACTIVE',105,'Science'),
 (33,'Swapnil More','swapnil.m@diet.gov.in','trainer@123','English Trainer','ACTIVE',104,'English'),
 (34,'Vaishali Jadhav','vaishali.j@diet.gov.in','trainer@123','History Trainer','ACTIVE',106,'History'),
@@ -135,17 +135,7 @@ INSERT INTO trainers (trainer_id, trainer_name, email, password, designation, st
 (37,'Rohan Patil','rohan.p@diet.gov.in','trainer@123','Computer Trainer','ACTIVE',110,'CS'),
 (38,'Sonal Pawar','sonal.p@diet.gov.in','trainer@123','EVS Trainer','ACTIVE',109,'PE'),
 (39,'Dilip Kulkarni','dilip.k@diet.gov.in','trainer@123','Marathi Trainer','ACTIVE',102,'Marathi'),
-(40,'Madhuri Deshmukh','madhuri.d@diet.gov.in','trainer@123','Hindi Trainer','ACTIVE',103,'Hindi'),
-(41,'Vikas Patil','vikas.p@diet.gov.in','trainer@123','Math Trainer','INACTIVE',101,'Mathematics'),
-(42,'Rutuja More','rutuja.m@diet.gov.in','trainer@123','Science Trainer','INACTIVE',105,'Science'),
-(43,'Sagar Kulkarni','sagar.k@diet.gov.in','trainer@123','English Trainer','INACTIVE',104,'English'),
-(44,'Komal Jadhav','komal.j@diet.gov.in','trainer@123','History Trainer','INACTIVE',106,'History'),
-(45,'Yogesh Shinde','yogesh.s@diet.gov.in','trainer@123','Geography Trainer','INACTIVE',107,'Geography'),
-(46,'Bhavana Joshi','bhavana.j@diet.gov.in','trainer@123','Art Trainer','INACTIVE',108,'Art'),
-(47,'Kunal Patil','kunal.p@diet.gov.in','trainer@123','Computer Trainer','INACTIVE',110,'CS'),
-(48,'Sujata Pawar','sujata.p@diet.gov.in','trainer@123','EVS Trainer','INACTIVE',109,'PE'),
-(49,'Milind Desai','milind.d@diet.gov.in','trainer@123','Marathi Trainer','INACTIVE',102,'Marathi'),
-(50,'Pankaj Kulkarni','pankaj.k@diet.gov.in','trainer@123','Hindi Trainer','INACTIVE',103,'Hindi');
+(40,'Madhuri Deshmukh','madhuri.d@diet.gov.in','trainer@123','Hindi Trainer','ACTIVE',103,'Hindi');
 
 CREATE TABLE training_modules (
   id SERIAL PRIMARY KEY,
@@ -197,25 +187,21 @@ INSERT INTO trainer_videos (video_id, subject, title, upload_date, video_url, sc
 (20,'Math','Trainer Math Session 8','2025-05-08 00:00:00','https://www.youtube.com/live/qeh_IpVwj2M?si=CWxOjEyk_Jhx0Zlm',111,'S.M. Joshi'),
 (21,'Math','Trainer Math Session 9','2025-05-09 00:00:00','https://www.youtube.com/live/ny8YWy_-aqA?si=w_dwdlG0u25GR6q9',111,'S.M. Joshi'),
 (22,'Math','Trainer Math Session 10','2025-05-10 00:00:00','https://www.youtube.com/live/SuZH0OxsXE0?si=CoBL5bTAiPhGhdYJ',111,'S.M. Joshi'),
-(23,'math','Lessons','2026-01-24 15:08:27','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'s.m.joshi'),
-(24,'math','Lessons','2026-01-24 15:10:00','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'s.m.joshi'),
-(25,'math','Lessonsss','2026-01-24 15:16:39','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'s.m.joshi'),
-(26,'math','heavy','2026-01-24 15:41:42','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'s.m.joshi'),
-(27,'math','heavy','2026-01-24 15:48:09','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'s.m.joshi'),
-(28,'math','heavy','2026-01-24 15:50:10','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'s.m.joshi'),
-(29,'math','heavy','2026-01-24 15:59:21','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'s.m.joshi'),
-(30,'math','heavy','2026-01-24 16:02:01','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'S.M.Joshi'),
-(31,'math','heavy','2026-01-24 16:13:02','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'S.M.Joshi'),
-(32,'math','om chaudhari','2026-01-24 16:13:29','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'S.M.Joshi');
-
--- ------------------------------------------------------
--- Dependent Tables (Level 1)
--- ------------------------------------------------------
+(23,'Math','Lessons','2026-01-24 15:08:27','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'S.M. Joshi'),
+(24,'Math','Lessons','2026-01-24 15:10:00','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'S.M. Joshi'),
+(25,'Math','Lessonsss','2026-01-24 15:16:39','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'S.M. Joshi'),
+(26,'Math','heavy','2026-01-24 15:41:42','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'S.M. Joshi'),
+(27,'Math','heavy','2026-01-24 15:48:09','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'S.M. Joshi'),
+(28,'Math','heavy','2026-01-24 15:50:10','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'S.M. Joshi'),
+(29,'Math','heavy','2026-01-24 15:59:21','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'S.M. Joshi'),
+(30,'Math','heavy','2026-01-24 16:02:01','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'S.M. Joshi'),
+(31,'Math','heavy','2026-01-24 16:13:02','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'S.M. Joshi'),
+(32,'Math','om chaudhari','2026-01-24 16:13:29','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'S.M. Joshi');
 
 CREATE TABLE teachers (
   teacher_id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
-  email VARCHAR(100) UNIQUE,
+  email CITEXT UNIQUE,
   password VARCHAR(255) NOT NULL,
   subject_id INT REFERENCES login(subject_id),
   college_id INT REFERENCES colleges(college_id),
@@ -230,16 +216,16 @@ CREATE TABLE teachers (
 );
 
 INSERT INTO teachers (teacher_id, name, email, password, subject_id, college_id, experience, designation, class_id, joined_date, subject, school_id, school_name, cluster) VALUES 
-(1,'ayesha','siddhivilas26@gmail.com','123',101,1,5,'hod',1,'0012-12-12','math',111,'s.m.joshi','C'),
-(2,'om','s222222@gmail.com','123',101,1,4,'asst. hod',1,'2009-09-12','math',111,'s.m.joshi','A'),
-(3,'Sneha Kulkarni','sneha.k@edu.in','sneha@123',105,2,6,'Teacher',3,'2019-08-15','Science',111,'s.m.joshi','A'),
-(4,'Vijay Pawar','vijay.p@edu.in','vijay@123',102,2,12,'Senior Teacher',4,'2013-05-20','Marathi',111,'s.m.joshi','A'),
-(5,'Neha Jadhav','neha.j@edu.in','neha@123',103,3,5,'Assistant Teacher',5,'2020-06-10','Hindi',111,'s.m.joshi','B'),
-(6,'Sunil Shinde','sunil.s@edu.in','sunil@123',106,3,9,'Teacher',2,'2016-04-18','History',111,'s.m.joshi','B'),
-(7,'Pooja More','pooja.m@edu.in','pooja@123',107,1,4,'Assistant Teacher',3,'2021-01-05','Geography',111,'s.m.joshi','B'),
-(8,'Amit Kale','amit.k@edu.in','amit@123',110,2,7,'Teacher',4,'2018-09-09','Computer',111,'s.m.joshi','B'),
-(9,'Kavita Joshi','kavita.j@edu.in','kavita@123',108,3,11,'Senior Teacher',1,'2012-03-22','Art',111,'s.m.joshi',NULL),
-(10,'Rahul Patankar','rahul.p@edu.in','rahul@123',109,1,6,'Teacher',5,'2019-11-11','PE',111,'s.m.joshi','c'),
+(1,'ayesha','siddhivilas26@gmail.com','123',101,1,5,'hod',1,'0012-12-12','Math',111,'S.M. Joshi','C'),
+(2,'om','s222222@gmail.com','123',101,1,4,'asst. hod',1,'2009-09-12','Math',111,'S.M. Joshi','A'),
+(3,'Sneha Kulkarni','sneha.k@edu.in','sneha@123',105,2,6,'Teacher',3,'2019-08-15','Science',111,'S.M. Joshi','A'),
+(4,'Vijay Pawar','vijay.p@edu.in','vijay@123',102,2,12,'Senior Teacher',4,'2013-05-20','Marathi',111,'S.M. Joshi','A'),
+(5,'Neha Jadhav','neha.j@edu.in','neha@123',103,3,5,'Assistant Teacher',5,'2020-06-10','Hindi',111,'S.M. Joshi','B'),
+(6,'Sunil Shinde','sunil.s@edu.in','sunil@123',106,3,9,'Teacher',2,'2016-04-18','History',111,'S.M. Joshi','B'),
+(7,'Pooja More','pooja.m@edu.in','pooja@123',107,1,4,'Assistant Teacher',3,'2021-01-05','Geography',111,'S.M. Joshi','B'),
+(8,'Amit Kale','amit.k@edu.in','amit@123',110,2,7,'Teacher',4,'2018-09-09','Computer',111,'S.M. Joshi','B'),
+(9,'Kavita Joshi','kavita.j@edu.in','kavita@123',108,3,11,'Senior Teacher',1,'2012-03-22','Art',111,'S.M. Joshi',NULL),
+(10,'Rahul Patankar','rahul.p@edu.in','rahul@123',109,1,6,'Teacher',5,'2019-11-11','PE',111,'S.M. Joshi','C'),
 (11,'Asha Patil','asha10@edu.in','teach@123',101,1,12,'Senior Teacher',1,'2014-06-01','Math',111,'S.M. Joshi','A'),
 (12,'Ravi Kulkarni','ravi11@edu.in','teach@123',101,1,8,'Teacher',2,'2017-07-15','Math',111,'S.M. Joshi','A'),
 (13,'Sneha Deshmukh','sneha12@edu.in','teach@123',104,1,6,'Teacher',3,'2019-08-10','English',111,'S.M. Joshi','A'),
@@ -335,32 +321,32 @@ CREATE TABLE students (
 );
 
 INSERT INTO students (student_id, student_name, class_id, college_id, attendance, marks, behaviour_score, school_id, school_name) VALUES 
-(1,'om',1,1,2,8,6,111,'s.m.joshi'),
-(2,'ayesha',1,1,4,6,7,111,'s.m.joshi'),
-(3,'siddhi',1,1,7,1,3,111,'s.m.joshi'),
-(4,'shanta',1,1,100,1,1,111,'s.m.joshi'),
-(5,'sumit',1,1,7,2,6,111,'s.m.joshi'),
-(6,'ayush',1,1,2,5,8,111,'s.m.joshi'),
-(7,'manthan',1,1,8,4,1,111,'s.m.joshi'),
-(9,'shubham',1,1,6,3,2,111,'s.m.joshi'),
-(10,'aniket',1,1,8,2,4,111,'s.m.joshi'),
-(11,'prem',1,1,9,2,3,111,'s.m.joshi'),
-(12,'ram',1,1,45,3,8,111,'s.m.joshi'),
-(13,'Aryan',1,1,99,10,9,111,'s.m.joshi'),
-(14,'shivtej',1,1,44,12,7,111,'s.m.joshi'),
-(15,'roshan',1,1,55,34,6,111,'s.m.joshi'),
-(16,'om',1,1,66,44,1,111,'s.m.joshi'),
-(17,'vidya',1,1,0,66,8,111,'s.m.joshi'),
+(1,'om',1,1,2,8,6,111,'S.M. Joshi'),
+(2,'ayesha',1,1,4,6,7,111,'S.M. Joshi'),
+(3,'siddhi',1,1,7,1,3,111,'S.M. Joshi'),
+(4,'shanta',1,1,100,1,1,111,'S.M. Joshi'),
+(5,'sumit',1,1,7,2,6,111,'S.M. Joshi'),
+(6,'ayush',1,1,2,5,8,111,'S.M. Joshi'),
+(7,'manthan',1,1,8,4,1,111,'S.M. Joshi'),
+(9,'shubham',1,1,6,3,2,111,'S.M. Joshi'),
+(10,'aniket',1,1,8,2,4,111,'S.M. Joshi'),
+(11,'prem',1,1,9,2,3,111,'S.M. Joshi'),
+(12,'ram',1,1,45,3,8,111,'S.M. Joshi'),
+(13,'Aryan',1,1,99,10,9,111,'S.M. Joshi'),
+(14,'shivtej',1,1,44,12,7,111,'S.M. Joshi'),
+(15,'roshan',1,1,55,34,6,111,'S.M. Joshi'),
+(16,'om',1,1,66,44,1,111,'S.M. Joshi'),
+(17,'vidya',1,1,0,66,8,111,'S.M. Joshi'),
 (18,'Sahil',1,1,100,100,10,NULL,NULL),
-(19,'aisha inamdar',1,1,30,70,6,111,'s.m.joshi'),
-(20,'Rajveer',1,1,14,50,5,111,'s.m.joshi'),
-(21,'Abc',1,1,50,60,5,111,'s.m.joshi'),
-(26,'Virat',1,1,99,99,10,111,'s.m.joshi'),
-(27,'Sumit Patel ',1,1,25,85,9,111,'s.m.joshi'),
-(28,'Sanvi ',1,1,80,50,9,111,'s.m.joshi'),
-(29,'Siddhi Vilas Bahutule ',1,1,80,89,7,111,'S m joshi'),
-(30,'Anushri',1,1,77,50,2,111,'s.m.joshi'),
-(31,'Arun',1,1,77,34,10,111,'s.m.joshi'),
+(19,'aisha inamdar',1,1,30,70,6,111,'S.M. Joshi'),
+(20,'Rajveer',1,1,14,50,5,111,'S.M. Joshi'),
+(21,'Abc',1,1,50,60,5,111,'S.M. Joshi'),
+(26,'Virat',1,1,99,99,10,111,'S.M. Joshi'),
+(27,'Sumit Patel ',1,1,25,85,9,111,'S.M. Joshi'),
+(28,'Sanvi ',1,1,80,50,9,111,'S.M. Joshi'),
+(29,'Siddhi Vilas Bahutule ',1,1,80,89,7,111,'S.M. Joshi'),
+(30,'Anushri',1,1,77,50,2,111,'S.M. Joshi'),
+(31,'Arun',1,1,77,34,10,111,'S.M. Joshi'),
 (32,'Student32',1,1,85,72,7,111,'S.M. Joshi'),
 (33,'Student33',2,1,78,65,6,111,'S.M. Joshi'),
 (34,'Student34',3,1,92,81,8,111,'S.M. Joshi'),
@@ -527,12 +513,8 @@ INSERT INTO videos (video_id, title, subject_id, class_id, language, video_url, 
 (105,'Hindi Live Session 8',112,8,'Hindi','https://www.youtube.com/live/RtutjvvvlU0?si=JFLZ-cOQqozpa3iy',1,'Hindi live video for Class 8','2025-04-27 00:00:00',111,'S.M. Joshi'),
 (106,'Hindi Live Session 9',112,9,'Hindi','https://www.youtube.com/live/DTpQvo4U2nk?si=Cln5jVipR_rKhk_q',1,'Hindi live video for Class 9','2025-04-28 00:00:00',111,'S.M. Joshi'),
 (107,'Hindi Live Session 10',112,10,'Hindi','https://www.youtube.com/live/7ZdwccQow6c?si=1toZw4IGc87W8DL9',1,'Hindi live video for Class 10','2025-04-29 00:00:00',111,'S.M. Joshi'),
-(108,'om chaudhari',101,1,NULL,'https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',NULL,'not defined','2026-01-24 16:23:44',111,'s.m.joshi'),
-(109,'om chaudhari',101,1,NULL,'https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',NULL,'not defined','2026-01-24 16:28:39',111,'s.m.joshi');
-
--- ------------------------------------------------------
--- Dependent Tables (Level 2 & 3)
--- ------------------------------------------------------
+(108,'om chaudhari',101,1,NULL,'https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',NULL,'not defined','2026-01-24 16:23:44',111,'S.M. Joshi'),
+(109,'om chaudhari',101,1,NULL,'https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',NULL,'not defined','2026-01-24 16:28:39',111,'S.M. Joshi');
 
 CREATE TABLE teacher_issues (
   issue_id SERIAL PRIMARY KEY,
@@ -548,17 +530,17 @@ CREATE TABLE teacher_issues (
 );
 
 INSERT INTO teacher_issues (issue_id, teacher_id, subject_id, class_id, issue_description, status, created_at, category, school_id, school_name) VALUES 
-(3,1,101,1,'hello its description about 1st demo','PENDING','2026-01-12 13:59:35','first category',111,'s.m.joshi'),
-(4,1,101,1,'rfed','PENDING','2026-01-12 14:33:01','gf',111,'s.m.joshi'),
-(5,1,101,1,'Technical gadgets shortage','PENDING','2026-01-12 14:37:44','It Support',111,'s.m.joshi'),
-(6,1,101,1,'yt','PENDING','2026-01-12 14:38:24','ygfd',111,'s.m.joshi'),
-(7,1,101,1,'ljhg','PENDING','2026-01-12 14:40:16','og',111,'s.m.joshi'),
-(8,1,101,1,'Students are not coming for the regular lectures','PENDING','2026-01-12 14:43:16','Poor Attendance of students',111,'s.m.joshi'),
-(9,1,101,1,'every students behavior and grasping power is different','PENDING','2026-01-12 14:54:34','Behaviour problem of student',111,'s.m.joshi'),
-(10,1,101,1,'mentor visits are less frequent','PENDING','2026-01-12 14:56:17','consultancy',111,'s.m.joshi'),
-(11,1,101,1,'dfg','PENDING','2026-01-12 15:29:06','dfg',111,'s.m.joshi'),
-(12,1,101,1,'infrastructure','PENDING','2026-01-13 12:28:47','it',111,'s.m.joshi'),
-(13,1,101,1,'poor internet connections','PENDING','2026-01-13 12:47:54','internet',111,'s.m.joshi'),
+(3,1,101,1,'hello its description about 1st demo','PENDING','2026-01-12 13:59:35','first category',111,'S.M. Joshi'),
+(4,1,101,1,'rfed','PENDING','2026-01-12 14:33:01','gf',111,'S.M. Joshi'),
+(5,1,101,1,'Technical gadgets shortage','PENDING','2026-01-12 14:37:44','It Support',111,'S.M. Joshi'),
+(6,1,101,1,'yt','PENDING','2026-01-12 14:38:24','ygfd',111,'S.M. Joshi'),
+(7,1,101,1,'ljhg','PENDING','2026-01-12 14:40:16','og',111,'S.M. Joshi'),
+(8,1,101,1,'Students are not coming for the regular lectures','PENDING','2026-01-12 14:43:16','Poor Attendance of students',111,'S.M. Joshi'),
+(9,1,101,1,'every students behavior and grasping power is different','PENDING','2026-01-12 14:54:34','Behaviour problem of student',111,'S.M. Joshi'),
+(10,1,101,1,'mentor visits are less frequent','PENDING','2026-01-12 14:56:17','consultancy',111,'S.M. Joshi'),
+(11,1,101,1,'dfg','PENDING','2026-01-12 15:29:06','dfg',111,'S.M. Joshi'),
+(12,1,101,1,'infrastructure','PENDING','2026-01-13 12:28:47','it',111,'S.M. Joshi'),
+(13,1,101,1,'poor internet connections','PENDING','2026-01-13 12:47:54','internet',111,'S.M. Joshi'),
 (14,1,101,1,'Students are facing difficulty understanding basic addition concepts.','OPEN','2025-01-05 10:15:00','Academic',111,'S.M. Joshi'),
 (15,2,101,2,'Need additional worksheets for practice sessions.','IN_PROGRESS','2025-01-06 11:00:00','Academic',111,'S.M. Joshi'),
 (16,3,105,3,'Science lab equipment not sufficient for all students.','OPEN','2025-01-07 09:45:00','Infrastructure',111,'S.M. Joshi'),
@@ -569,7 +551,7 @@ INSERT INTO teacher_issues (issue_id, teacher_id, subject_id, class_id, issue_de
 (21,7,107,8,'World map chart required for geography lessons.','RESOLVED','2025-01-12 01:15:00','Infrastructure',111,'S.M. Joshi'),
 (22,8,108,9,'Art supplies like colours and drawing sheets are insufficient.','OPEN','2025-01-13 10:50:00','Infrastructure',111,'S.M. Joshi'),
 (23,9,110,10,'Computer lab systems are running slow during practical sessions.','IN_PROGRESS','2025-01-14 02:00:00','Technical',111,'S.M. Joshi'),
-(24,1,101,1,'no food available','PENDING','2026-01-20 15:01:07','canteen',111,'s.m.joshi'),
+(24,1,101,1,'no food available','PENDING','2026-01-20 15:01:07','canteen',111,'S.M. Joshi'),
 (145,10,101,1,'Students struggle with basic addition concepts','OPEN','2025-01-01 10:00:00','Academic',NULL,'S.M. Joshi'),
 (146,11,101,2,'Need more practice worksheets','IN_PROGRESS','2025-01-02 11:00:00','Academic',NULL,'S.M. Joshi'),
 (147,12,104,3,'Low reading comprehension among students','OPEN','2025-01-03 09:30:00','Academic',NULL,'S.M. Joshi'),
@@ -601,7 +583,7 @@ INSERT INTO teacher_issues (issue_id, teacher_id, subject_id, class_id, issue_de
 (238,38,104,9,'Need more story books','OPEN','2025-01-29 10:20:00','Academic',NULL,'S.M. Joshi'),
 (239,39,106,10,'Time management issue','IN_PROGRESS','2025-01-30 11:50:00','Administrative',NULL,'S.M. Joshi'),
 (240,40,107,1,'Map reading difficult','OPEN','2025-01-31 09:35:00','Academic',NULL,'S.M. Joshi'),
-(241,1,101,1,'we don''t want daily college','PENDING','2026-01-24 16:34:50','daily college',111,'s.m.joshi');
+(241,1,101,1,'we don''t want daily college','PENDING','2026-01-24 16:34:50','daily college',111,'S.M. Joshi');
 
 CREATE TABLE issue_responses (
   response_id SERIAL PRIMARY KEY,

@@ -9,8 +9,8 @@ public class DBConnection {
 
     static {
         try {
-            /*Class.forName("com.mysql.cj.jdbc.Driver");*/
-            Class.forName("org.postgresql.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            /*Class.forName("org.postgresql.Driver");*/
 
             // Read environment variables
             String envUrl  = System.getenv("DB_URL");
