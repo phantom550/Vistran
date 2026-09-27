@@ -13,7 +13,7 @@ import java.sql.PreparedStatement;
 @WebServlet("/TrainerSignupServlet")
 public class TrainerSignupServlet extends HttpServlet {
 	
-	protected void doPost(HttpServletRequest req, HttpServletResponse res) {
+	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
 	 // Get form parameters
     String trainer_id = req.getParameter("trainer_id");
     String trainer_name = req.getParameter("trainer_name");
@@ -23,9 +23,27 @@ public class TrainerSignupServlet extends HttpServlet {
     String password = req.getParameter("password");
     String subject = req.getParameter("subject");
     String status = "Active";
-    int subject_id = Integer.parseInt(subject_id_str);
-    int active = 2; // default value, assuming from .class constants
 
+    if (trainer_id == null || trainer_id.isEmpty() ||
+        subject_id_str == null || subject_id_str.isEmpty() ||
+        password == null || password.isEmpty()) {
+        res.getWriter().println("Trainer ID, Subject ID and Password are required");
+        return;
+    }
+
+    int trainerIdInt, subject_id;
+    try {
+        trainerIdInt = Integer.parseInt(trainer_id);
+    } catch (NumberFormatException e) {
+        res.getWriter().println("Trainer ID must be a number");
+        return;
+    }
+    try {
+        subject_id = Integer.parseInt(subject_id_str);
+    } catch (NumberFormatException e) {
+        res.getWriter().println("Subject ID must be a number");
+        return;
+    }
 
     try {
     	Connection con = new DBConnection().getConnection();
@@ -36,7 +54,7 @@ public class TrainerSignupServlet extends HttpServlet {
         PreparedStatement st = con.prepareStatement(sql);
        
 
-        st.setInt(1, Integer.parseInt(trainer_id));
+        st.setInt(1, trainerIdInt);
         st.setString(2, trainer_name);
         st.setString(3, email);
         st.setString(5, designation);
@@ -56,6 +74,7 @@ public class TrainerSignupServlet extends HttpServlet {
     } 
     catch (Exception e) {
         e.printStackTrace();
+        res.getWriter().println("Signup failed (the Trainer ID or email may already be in use): " + e.getMessage());
     }
 	}
 }

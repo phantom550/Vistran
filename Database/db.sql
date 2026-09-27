@@ -1,27 +1,36 @@
--- Completely wipe any existing broken tables
-DROP TABLE IF EXISTS issue_responses CASCADE;
-DROP TABLE IF EXISTS teacher_issues CASCADE;
-DROP TABLE IF EXISTS trainer_college_mapping CASCADE;
-DROP TABLE IF EXISTS trainer_subject_mapping CASCADE;
-DROP TABLE IF EXISTS videos CASCADE;
-DROP TABLE IF EXISTS trainer_videos CASCADE;
-DROP TABLE IF EXISTS students CASCADE;
-DROP TABLE IF EXISTS notices CASCADE;
-DROP TABLE IF EXISTS teachers CASCADE;
-DROP TABLE IF EXISTS trainers CASCADE;
-DROP TABLE IF EXISTS login CASCADE;
-DROP TABLE IF EXISTS colleges CASCADE;
-DROP TABLE IF EXISTS classes CASCADE;
-DROP TABLE IF EXISTS admins CASCADE;
-DROP TABLE IF EXISTS training_modules CASCADE;
+CREATE DATABASE IF NOT EXISTS db;
+USE db;
 
-CREATE EXTENSION IF NOT EXISTS citext;
+-- Disable foreign key checks temporarily to wipe tables cleanly
+SET FOREIGN_KEY_CHECKS = 0;
 
--- Recreate Base Tables correctly for PostgreSQL
+DROP TABLE IF EXISTS issue_responses;
+DROP TABLE IF EXISTS teacher_issues;
+DROP TABLE IF EXISTS trainer_college_mapping;
+DROP TABLE IF EXISTS trainer_subject_mapping;
+DROP TABLE IF EXISTS videos;
+DROP TABLE IF EXISTS trainer_videos;
+DROP TABLE IF EXISTS students;
+DROP TABLE IF EXISTS notices;
+DROP TABLE IF EXISTS teachers;
+DROP TABLE IF EXISTS trainers;
+DROP TABLE IF EXISTS login;
+DROP TABLE IF EXISTS colleges;
+DROP TABLE IF EXISTS classes;
+DROP TABLE IF EXISTS admins;
+DROP TABLE IF EXISTS training_modules;
+
+-- Re-enable foreign key checks for table creation
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- ------------------------------------------------------
+-- Base Tables
+-- ------------------------------------------------------
+
 CREATE TABLE admins (
-  admin_id SERIAL PRIMARY KEY,
+  admin_id INT AUTO_INCREMENT PRIMARY KEY,
   admin_name VARCHAR(100) NOT NULL,
-  email CITEXT UNIQUE,
+  email VARCHAR(255) UNIQUE,
   password VARCHAR(255) NOT NULL,
   role VARCHAR(30) DEFAULT NULL
 );
@@ -43,7 +52,7 @@ INSERT INTO classes (class_id, class_name) VALUES
 (6,'class 6'),(7,'class 7'),(8,'class 8'),(9,'class 9'),(10,'class 10');
 
 CREATE TABLE colleges (
-  college_id SERIAL PRIMARY KEY,
+  college_id INT AUTO_INCREMENT PRIMARY KEY,
   college_name VARCHAR(150) NOT NULL,
   district VARCHAR(100) DEFAULT NULL,
   address TEXT
@@ -69,7 +78,6 @@ CREATE TABLE login (
   school_name VARCHAR(45) DEFAULT NULL
 );
 
--- Note: Corrected standard spelling to match Java
 INSERT INTO login (subject_id, password, subject, school_id, school_name) VALUES 
 (101,'123','Math',111,'S.M. Joshi'),
 (102,'123','Science',111,'S.M. Joshi'),
@@ -85,9 +93,9 @@ INSERT INTO login (subject_id, password, subject, school_id, school_name) VALUES
 (112,'123','Hindi',111,'S.M. Joshi');
 
 CREATE TABLE trainers (
-  trainer_id SERIAL PRIMARY KEY,
+  trainer_id INT AUTO_INCREMENT PRIMARY KEY,
   trainer_name VARCHAR(100) NOT NULL,
-  email CITEXT UNIQUE,
+  email VARCHAR(255) UNIQUE,
   password VARCHAR(255) NOT NULL,
   designation VARCHAR(50) DEFAULT NULL,
   status VARCHAR(20) DEFAULT 'ACTIVE',
@@ -138,7 +146,7 @@ INSERT INTO trainers (trainer_id, trainer_name, email, password, designation, st
 (40,'Madhuri Deshmukh','madhuri.d@diet.gov.in','trainer@123','Hindi Trainer','ACTIVE',103,'Hindi');
 
 CREATE TABLE training_modules (
-  id SERIAL PRIMARY KEY,
+  id INT AUTO_INCREMENT PRIMARY KEY,
   content TEXT,
   cluster VARCHAR(50) DEFAULT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -167,7 +175,7 @@ INSERT INTO training_modules (id, content, cluster, created_at) VALUES
 (81,'Creating inclusive classrooms for diverse learners.\nAddresses learning differences and social inclusion.\nBuilds a positive classroom environment.','C','2025-03-20 06:30:00');
 
 CREATE TABLE trainer_videos (
-  video_id SERIAL PRIMARY KEY,
+  video_id INT AUTO_INCREMENT PRIMARY KEY,
   subject VARCHAR(50) DEFAULT NULL,
   title VARCHAR(255) NOT NULL,
   upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -198,21 +206,28 @@ INSERT INTO trainer_videos (video_id, subject, title, upload_date, video_url, sc
 (31,'Math','heavy','2026-01-24 16:13:02','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'S.M. Joshi'),
 (32,'Math','om chaudhari','2026-01-24 16:13:29','https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',111,'S.M. Joshi');
 
+-- ------------------------------------------------------
+-- Dependent Tables (Need Foreign Keys)
+-- ------------------------------------------------------
+
 CREATE TABLE teachers (
-  teacher_id SERIAL PRIMARY KEY,
+  teacher_id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
-  email CITEXT UNIQUE,
+  email VARCHAR(255) UNIQUE,
   password VARCHAR(255) NOT NULL,
-  subject_id INT REFERENCES login(subject_id),
-  college_id INT REFERENCES colleges(college_id),
+  subject_id INT,
+  college_id INT,
   experience INT DEFAULT NULL,
   designation VARCHAR(50) DEFAULT NULL,
-  class_id INT REFERENCES classes(class_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  class_id INT,
   joined_date DATE DEFAULT NULL,
   subject VARCHAR(20) DEFAULT NULL,
   school_id INT DEFAULT NULL,
   school_name VARCHAR(45) DEFAULT NULL,
-  cluster VARCHAR(50) DEFAULT NULL
+  cluster VARCHAR(50) DEFAULT NULL,
+  FOREIGN KEY (subject_id) REFERENCES login(subject_id),
+  FOREIGN KEY (college_id) REFERENCES colleges(college_id),
+  FOREIGN KEY (class_id) REFERENCES classes(class_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 INSERT INTO teachers (teacher_id, name, email, password, subject_id, college_id, experience, designation, class_id, joined_date, subject, school_id, school_name, cluster) VALUES 
@@ -258,17 +273,19 @@ INSERT INTO teachers (teacher_id, name, email, password, subject_id, college_id,
 (40,'Nitin Shinde','nitin39@edu.in','teach@123',106,1,8,'Teacher',10,'2017-11-11','History',111,'S.M. Joshi','C');
 
 CREATE TABLE notices (
-  notice_id SERIAL PRIMARY KEY,
+  notice_id INT AUTO_INCREMENT PRIMARY KEY,
   subject VARCHAR(50) DEFAULT NULL,
   description TEXT NOT NULL,
   created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   title VARCHAR(500) DEFAULT NULL,
   attachment_path VARCHAR(255) DEFAULT NULL,
-  class_id INT REFERENCES classes(class_id),
-  college_id INT REFERENCES colleges(college_id),
+  class_id INT,
+  college_id INT,
   created_by VARCHAR(50) DEFAULT NULL,
   school_id INT DEFAULT NULL,
-  school_name VARCHAR(45) DEFAULT NULL
+  school_name VARCHAR(45) DEFAULT NULL,
+  FOREIGN KEY (class_id) REFERENCES classes(class_id),
+  FOREIGN KEY (college_id) REFERENCES colleges(college_id)
 );
 
 INSERT INTO notices (notice_id, subject, description, created_date, title, attachment_path, class_id, college_id, created_by, school_id, school_name) VALUES 
@@ -309,15 +326,17 @@ INSERT INTO notices (notice_id, subject, description, created_date, title, attac
 (74,'Computer','Introduce basic programming idea.','2025-03-07 00:00:00','Intro to Programming',NULL,5,1,'7',111,'S.M. Joshi');
 
 CREATE TABLE students (
-  student_id SERIAL PRIMARY KEY,
+  student_id INT AUTO_INCREMENT PRIMARY KEY,
   student_name VARCHAR(100) NOT NULL,
-  class_id INT REFERENCES classes(class_id),
-  college_id INT REFERENCES colleges(college_id),
+  class_id INT,
+  college_id INT,
   attendance INT DEFAULT NULL,
-  marks REAL DEFAULT NULL,
+  marks FLOAT DEFAULT NULL,
   behaviour_score INT DEFAULT NULL,
   school_id INT DEFAULT NULL,
-  school_name VARCHAR(45) DEFAULT NULL
+  school_name VARCHAR(45) DEFAULT NULL,
+  FOREIGN KEY (class_id) REFERENCES classes(class_id),
+  FOREIGN KEY (college_id) REFERENCES colleges(college_id)
 );
 
 INSERT INTO students (student_id, student_name, class_id, college_id, attendance, marks, behaviour_score, school_id, school_name) VALUES 
@@ -419,9 +438,11 @@ INSERT INTO students (student_id, student_name, class_id, college_id, attendance
 (101,'Student101',10,1,75,63,6,111,'S.M. Joshi');
 
 CREATE TABLE trainer_college_mapping (
-  mapping_id SERIAL PRIMARY KEY,
-  trainer_id INT REFERENCES trainers(trainer_id),
-  college_id INT REFERENCES colleges(college_id)
+  mapping_id INT AUTO_INCREMENT PRIMARY KEY,
+  trainer_id INT,
+  college_id INT,
+  FOREIGN KEY (trainer_id) REFERENCES trainers(trainer_id),
+  FOREIGN KEY (college_id) REFERENCES colleges(college_id)
 );
 
 INSERT INTO trainer_college_mapping (mapping_id, trainer_id, college_id) VALUES 
@@ -429,9 +450,11 @@ INSERT INTO trainer_college_mapping (mapping_id, trainer_id, college_id) VALUES
 (20,5,1),(21,5,2),(22,6,3),(23,7,1),(24,8,2),(25,9,3),(26,10,1);
 
 CREATE TABLE trainer_subject_mapping (
-  mapping_id SERIAL PRIMARY KEY,
-  trainer_id INT REFERENCES trainers(trainer_id),
-  subject_id INT REFERENCES login(subject_id)
+  mapping_id INT AUTO_INCREMENT PRIMARY KEY,
+  trainer_id INT,
+  subject_id INT,
+  FOREIGN KEY (trainer_id) REFERENCES trainers(trainer_id),
+  FOREIGN KEY (subject_id) REFERENCES login(subject_id)
 );
 
 INSERT INTO trainer_subject_mapping (mapping_id, trainer_id, subject_id) VALUES 
@@ -439,17 +462,20 @@ INSERT INTO trainer_subject_mapping (mapping_id, trainer_id, subject_id) VALUES
 (7,5,107),(8,5,110),(9,6,102),(10,7,101),(11,8,108),(12,9,109),(13,10,103);
 
 CREATE TABLE videos (
-  video_id SERIAL PRIMARY KEY,
+  video_id INT AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(150) DEFAULT NULL,
-  subject_id INT REFERENCES login(subject_id),
-  class_id INT REFERENCES classes(class_id),
+  subject_id INT,
+  class_id INT,
   language VARCHAR(50) DEFAULT NULL,
   video_url VARCHAR(255) DEFAULT NULL,
-  uploaded_by INT REFERENCES trainers(trainer_id),
+  uploaded_by INT,
   description TEXT NOT NULL,
   upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   school_id INT DEFAULT NULL,
-  school_name VARCHAR(45) DEFAULT NULL
+  school_name VARCHAR(45) DEFAULT NULL,
+  FOREIGN KEY (subject_id) REFERENCES login(subject_id),
+  FOREIGN KEY (class_id) REFERENCES classes(class_id),
+  FOREIGN KEY (uploaded_by) REFERENCES trainers(trainer_id)
 );
 
 INSERT INTO videos (video_id, title, subject_id, class_id, language, video_url, uploaded_by, description, upload_date, school_id, school_name) VALUES 
@@ -517,16 +543,19 @@ INSERT INTO videos (video_id, title, subject_id, class_id, language, video_url, 
 (109,'om chaudhari',101,1,NULL,'https://youtu.be/PfhHkGWxm2g?si=HP6ud02kvCsVh5vd',NULL,'not defined','2026-01-24 16:28:39',111,'S.M. Joshi');
 
 CREATE TABLE teacher_issues (
-  issue_id SERIAL PRIMARY KEY,
-  teacher_id INT REFERENCES teachers(teacher_id),
-  subject_id INT REFERENCES login(subject_id),
-  class_id INT REFERENCES classes(class_id),
+  issue_id INT AUTO_INCREMENT PRIMARY KEY,
+  teacher_id INT,
+  subject_id INT,
+  class_id INT,
   issue_description TEXT,
   status VARCHAR(30) DEFAULT 'PENDING',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   category VARCHAR(100) DEFAULT NULL,
   school_id INT DEFAULT NULL,
-  school_name VARCHAR(45) DEFAULT NULL
+  school_name VARCHAR(45) DEFAULT NULL,
+  FOREIGN KEY (teacher_id) REFERENCES teachers(teacher_id),
+  FOREIGN KEY (subject_id) REFERENCES login(subject_id),
+  FOREIGN KEY (class_id) REFERENCES classes(class_id)
 );
 
 INSERT INTO teacher_issues (issue_id, teacher_id, subject_id, class_id, issue_description, status, created_at, category, school_id, school_name) VALUES 
@@ -586,26 +615,10 @@ INSERT INTO teacher_issues (issue_id, teacher_id, subject_id, class_id, issue_de
 (241,1,101,1,'we don''t want daily college','PENDING','2026-01-24 16:34:50','daily college',111,'S.M. Joshi');
 
 CREATE TABLE issue_responses (
-  response_id SERIAL PRIMARY KEY,
-  issue_id INT REFERENCES teacher_issues(issue_id),
+  response_id INT AUTO_INCREMENT PRIMARY KEY,
+  issue_id INT,
   responder_id INT DEFAULT NULL,
   response_text TEXT,
-  response_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  response_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (issue_id) REFERENCES teacher_issues(issue_id)
 );
-
--- ------------------------------------------------------
--- Sync Auto-Increment Sequences
--- (Prevents Duplicate Key Errors on Future INSERTs)
--- ------------------------------------------------------
-SELECT setval(pg_get_serial_sequence('admins', 'admin_id'), COALESCE(MAX(admin_id), 1)) FROM admins;
-SELECT setval(pg_get_serial_sequence('colleges', 'college_id'), COALESCE(MAX(college_id), 1)) FROM colleges;
-SELECT setval(pg_get_serial_sequence('trainers', 'trainer_id'), COALESCE(MAX(trainer_id), 1)) FROM trainers;
-SELECT setval(pg_get_serial_sequence('teachers', 'teacher_id'), COALESCE(MAX(teacher_id), 1)) FROM teachers;
-SELECT setval(pg_get_serial_sequence('notices', 'notice_id'), COALESCE(MAX(notice_id), 1)) FROM notices;
-SELECT setval(pg_get_serial_sequence('students', 'student_id'), COALESCE(MAX(student_id), 1)) FROM students;
-SELECT setval(pg_get_serial_sequence('teacher_issues', 'issue_id'), COALESCE(MAX(issue_id), 1)) FROM teacher_issues;
-SELECT setval(pg_get_serial_sequence('trainer_college_mapping', 'mapping_id'), COALESCE(MAX(mapping_id), 1)) FROM trainer_college_mapping;
-SELECT setval(pg_get_serial_sequence('trainer_subject_mapping', 'mapping_id'), COALESCE(MAX(mapping_id), 1)) FROM trainer_subject_mapping;
-SELECT setval(pg_get_serial_sequence('trainer_videos', 'video_id'), COALESCE(MAX(video_id), 1)) FROM trainer_videos;
-SELECT setval(pg_get_serial_sequence('training_modules', 'id'), COALESCE(MAX(id), 1)) FROM training_modules;
-SELECT setval(pg_get_serial_sequence('videos', 'video_id'), COALESCE(MAX(video_id), 1)) FROM videos;

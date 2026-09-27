@@ -25,21 +25,27 @@ public class SignupServlet extends HttpServlet {
 	        String subject=req.getParameter("subject");
 	        String schoolid = req.getParameter("school_id");
 	        String school_name = req.getParameter("school_name");
-	        int school_id=Integer.parseInt(schoolid);
 
 	        // Validation
 	        if (idStr == null || idStr.isEmpty() ||
-	            password == null || password.isEmpty()) {
+	            password == null || password.isEmpty() ||
+	            schoolid == null || schoolid.isEmpty()) {
 
-	            res.getWriter().println("ID and Password are required");
+	            res.getWriter().println("ID, Password and School ID are required");
 	            return;
 	        }
 
-	        int id;
+	        int id, school_id;
 	        try {
 	            id = Integer.parseInt(idStr);
 	        } catch (NumberFormatException e) {
-	            res.getWriter().println("ID must be a number");
+	            res.getWriter().println("Subject ID must be a number (e.g. 113)");
+	            return;
+	        }
+	        try {
+	            school_id = Integer.parseInt(schoolid);
+	        } catch (NumberFormatException e) {
+	            res.getWriter().println("School ID must be a number (e.g. 111)");
 	            return;
 	        }
 
@@ -67,7 +73,7 @@ public class SignupServlet extends HttpServlet {
 
 	        } catch (Exception e) {
 	            e.printStackTrace();
-	            res.getWriter().println("Database Error");
+	            res.getWriter().println("Signup failed (the Subject ID may already be in use): " + e.getMessage());
 	        }
 	 }
 	 

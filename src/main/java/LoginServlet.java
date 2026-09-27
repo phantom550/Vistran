@@ -27,28 +27,35 @@ public class LoginServlet extends HttpServlet {
         String subject = req.getParameter("subject");
         String schoolid = req.getParameter("school_id");
         String school_name = req.getParameter("school_name");
-        int school_id=Integer.parseInt(schoolid);
 
         // Validation
         if (idStr == null || idStr.isEmpty() ||
-            password == null || password.isEmpty()) {
+            password == null || password.isEmpty() ||
+            schoolid == null || schoolid.isEmpty()) {
 
-            res.getWriter().println("ID and Password are required");
+            res.getWriter().println("ID, Password and School ID are required");
             return;
         }
 
-        int id;
+        int id, school_id;
         try {
             id = Integer.parseInt(idStr);
         } catch (NumberFormatException e) {
             res.getWriter().println("ID must be a number");
             return;
         }
+        try {
+            school_id = Integer.parseInt(schoolid);
+        } catch (NumberFormatException e) {
+            res.getWriter().println("School ID must be a number");
+            return;
+        }
 
         try {
         	Connection con = new DBConnection().getConnection();
 
-            String sql = "SELECT password FROM login WHERE subject_id=? AND subject=? and school_id=?";
+            // LOWER(...) so the form's "math" matches the DB's "Math"
+            String sql = "SELECT password FROM login WHERE subject_id=? AND LOWER(subject)=LOWER(?) and school_id=?";
             PreparedStatement st = con.prepareStatement(sql);
             st.setInt(1, id);
             st.setString(2, subject);
