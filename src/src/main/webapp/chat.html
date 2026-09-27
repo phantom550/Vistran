@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vistran AI Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
+    <style>
+        /* Using your Patina & Bronze Theme */
+        :root {
+            --patina-dark: #134E4A;
+            --patina-mid: #2D7A7B;
+            --bg-page: #F2F7F6;
+            --surface: #FFFFFF;
+            --copper: #B45309;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-page);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 500px;
+            height: 80vh;
+            background: var(--surface);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(19, 78, 74, 0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(45, 122, 123, 0.1);
+        }
+
+        /* HEADER */
+        .chat-header {
+            background: var(--patina-dark);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        /* CHAT AREA */
+        .chat-box {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: #F2F7F6;
+        }
+
+        /* BUBBLES */
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background: var(--patina-mid);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background: white;
+            color: #333;
+            border: 1px solid rgba(0,0,0,0.05);
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        /* Markdown/Code styling for bot responses */
+        .bot-message pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+        }
+
+        /* INPUT AREA */
+        .input-area {
+            padding: 15px;
+            background: white;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        input:focus { border-color: var(--patina-mid); }
+
+        button {
+            background: var(--copper);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        button:hover { background: #92400e; }
+        
+        /* LOADING ANIMATION */
+        .typing-indicator {
+            display: none;
+            font-size: 0.8rem;
+            color: #666;
+            margin-left: 20px;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <span class="material-symbols-rounded">smart_toy</span>
+            Vistran AI Assistant
+        </div>
+
+        <div class="chat-box" id="chat-box">
+            <div class="message bot-message">
+                Hello! I am your admin assistant. I can help you write notices, debug code, or analyze student data. How can I help?
+            </div>
+        </div>
+        
+        <div class="typing-indicator" id="typing-indicator">AI is thinking...</div>
+
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Type your query..." onkeypress="handleEnter(event)">
+            <button onclick="sendMessage()">
+                <span class="material-symbols-rounded">send</span>
+            </button>
+        </div>
+    </div>
+
+   <script>
+        // --- NEW JAVA SERVLET CONNECTION LOGIC WITH 60s TIMEOUT ---
+
+        async function sendMessage() {
+            const inputField = document.getElementById("user-input");
+            const chatBox = document.getElementById("chat-box");
+            const typingIndicator = document.getElementById("typing-indicator");
+            const userText = inputField.value.trim();
+
+            if (userText === "") return;
+
+            // 1. Add User Message to UI
+            addMessage(userText, 'user-message');
+            inputField.value = "";
+            
+            // 2. Show Loading & Scroll
+            typingIndicator.style.display = "block";
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // --- TIMEOUT SETUP (1 Minute) ---
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 60000); // 60,000 ms = 1 minute
+
+            try {
+                // 3. SEND TO JAVA SERVLET
+                const response = await fetch('GeminiChatServlet', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'prompt=' + encodeURIComponent(userText),
+                    signal: controller.signal // Link the abort controller here
+                });
+
+                // Clear timeout if request finishes before 60s
+                clearTimeout(timeoutId);
+
+                if (response.ok) {
+                    const aiText = await response.text();
+                    addMessage(aiText, 'bot-message');
+                } else {
+                    addMessage("System Error: Could not reach the Java server. Is Tomcat running?", 'bot-message');
+                    console.error("Server Error:", response.status, response.statusText);
+                }
+
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    addMessage("Error: Request timed out after 1 minute.", 'bot-message');
+                } else {
+                    console.error("Network Error:", error);
+                    addMessage("Network Error: Failed to send message.", 'bot-message');
+                }
+            } finally {
+                // 5. Hide Loading
+                typingIndicator.style.display = "none";
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        }
+
+        function addMessage(text, className) {
+            const chatBox = document.getElementById("chat-box");
+            const msgDiv = document.createElement("div");
+            msgDiv.classList.add("message", className);
+            
+            if (text.includes("```")) {
+                text = text.replace(/```([\s\S]*?)```/g, "<pre>$1</pre>");
+                msgDiv.innerHTML = text; 
+            } else {
+                msgDiv.textContent = text;
+            }
+
+            chatBox.appendChild(msgDiv);
+        }
+
+        function handleEnter(event) {
+            if (event.key === "Enter") sendMessage();
+        }
+    </script>
+
+</body>
+</html>

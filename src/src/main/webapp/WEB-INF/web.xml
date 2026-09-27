@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd" id="WebApp_ID" version="6.0">
+  <display-name>Void4</display-name>
+  
+  <servlet>
+     <servlet-name>LoginServlet</servlet-name>
+     <servlet-class>LoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>LoginServlet</servlet-name>
+      <url-pattern>/LoginServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+     <servlet-name>SignupServlet</servlet-name>
+     <servlet-class>SignupServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.SignupServlet</servlet-name>
+      <url-pattern>/SignupServlet</url-pattern>
+  </servlet-mapping>
+   <servlet>
+   
+   
+     <servlet-name>SubjectDashboardServlet</servlet-name>
+     <servlet-class>SubjectDashboardServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.SubjectDashboardServlet</servlet-name>
+      <url-pattern>/SubjectDashboardServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  <servlet-name>ClassesServlet</servlet-name>
+     <servlet-class>ClassesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.ClassesServlet</servlet-name>
+      <url-pattern>/ClassesServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  <servlet-name>EditTeacherServlet</servlet-name>
+     <servlet-class>EditTeacherServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.EditTeacherServlet</servlet-name>
+      <url-pattern>/EditTeacherServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  <servlet-name>RaiseIssueServlet</servlet-name>
+     <servlet-class>RaiseIssueServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.RaiseIssueServlet</servlet-name>
+      <url-pattern>/RaiseIssueServlet</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+  <servlet-name>AddStudent</servlet-name>
+     <servlet-class>AddStudent</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.AddStudent</servlet-name>
+      <url-pattern>/AddStudent</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+  <servlet-name>TrainerSignupServlet</servlet-name>
+     <servlet-class>TrainerSignupServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.TrainerSignupServlet</servlet-name>
+      <url-pattern>/TrainerSignupServlet</url-pattern>
+  </servlet-mapping>
+  
+     <servlet>
+  <servlet-name>TrainerSubjectDashboardServlet</servlet-name>
+     <servlet-class>TrainerSubjectDashboardServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.TrainerSubjectDashboardServlet</servlet-name>
+      <url-pattern>/TrainerSubjectDashboardServlet</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+  <servlet-name>AddVideosTrainerDashboardServlet</servlet-name>
+     <servlet-class>AddVideosTrainerDashboardServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.AddVideosTrainerDashboardServlet</servlet-name>
+      <url-pattern>/AddVideosTrainerDashboardServlet</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+  <servlet-name>AddNoticesTrainerDashboardServlet</servlet-name>
+     <servlet-class>AddNoticesTrainerDashboardServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.AddNoticesTrainerDashboardServlet</servlet-name>
+      <url-pattern>/AddNoticesTrainerDashboardServlet</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+  <servlet-name>TrainerClassesServlet</servlet-name>
+     <servlet-class>TrainerClassesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.TrainerClassesServlet</servlet-name>
+      <url-pattern>/TrainerClassesServlet</url-pattern>
+  </servlet-mapping>
+  
+     <servlet>
+  <servlet-name>GetIssueServlet</servlet-name>
+     <servlet-class>GetIssueServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.GetIssueServlet</servlet-name>
+      <url-pattern>/GetIssueServlet</url-pattern>
+  </servlet-mapping>
+  
+       <servlet>
+  <servlet-name>EditTrainerServlet</servlet-name>
+     <servlet-class>EditTrainerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.EditTrainerServlet</servlet-name>
+      <url-pattern>/EditTrainerServlet</url-pattern>
+  </servlet-mapping>
+  
+         <servlet>
+  <servlet-name>AdminDashboardServlet</servlet-name>
+     <servlet-class>AdminDashboardServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.AdminDashboardServlet</servlet-name>
+      <url-pattern>/AdminDashboardServlet</url-pattern>
+  </servlet-mapping>
+  
+           <servlet>
+  <servlet-name>ClusterAServlet</servlet-name>
+     <servlet-class>ClusterAServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.ClusterAServlet</servlet-name>
+      <url-pattern>/ClusterAServlet</url-pattern>
+  </servlet-mapping>
+  
+             <servlet>
+  <servlet-name>ClusterBServlet</servlet-name>
+     <servlet-class>ClusterBServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.ClusterBServlet</servlet-name>
+      <url-pattern>/ClusterBServlet</url-pattern>
+  </servlet-mapping>
+  
+             <servlet>
+  <servlet-name>ClusterCServlet</servlet-name>
+     <servlet-class>ClusterCServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.ClusterCServlet</servlet-name>
+      <url-pattern>/ClusterCServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  <servlet-name>AdaptModuleServlet</servlet-name>
+     <servlet-class>AdaptModuleServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>com.user.AdaptModuleServlet</servlet-name>
+      <url-pattern>/AdaptModuleServlet</url-pattern>
+  </servlet-mapping>
+  
+ 
+  
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.xhtml</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.xhtml</welcome-file>
+  </welcome-file-list>
+</web-app>

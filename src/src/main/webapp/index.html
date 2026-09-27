@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vistran - Next Gen School Administration</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+    <style>
+        :root {
+            /* --- Core Palette: "Aged Verdigris" --- */
+            --patina-dark: #134E4A;   /* Deepest Teal */
+            --patina-mid: #2D7A7B;    /* Classic Verdigris */
+            --patina-light: #99F6E4;  /* Bright Oxidized Mint */
+            
+            --copper-dark: #78350F;
+            --copper-mid: #B45309;
+            --copper-light: #F59E0B;
+            
+            --text-main: #132A28;
+            --text-muted: #4A6360;
+            
+            --bg-page: #F2F7F6;
+            --surface-glass: rgba(255, 255, 255, 0.9);
+            --surface-glass-border: rgba(45, 122, 123, 0.15);
+            
+            --shadow-soft: 0 10px 30px -10px rgba(19, 78, 74, 0.1);
+            --shadow-hover: 0 20px 40px -12px rgba(19, 78, 74, 0.2);
+        }
+
+        /* --- Global Reset --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-top: 72px; 
+        }
+
+        h1, h2, h3 { line-height: 1.1; font-weight: 700; letter-spacing: -0.5px; }
+        a { text-decoration: none; color: inherit; transition: 0.3s ease; }
+        img { max-width: 100%; display: block; }
+
+        /* --- GRADIENT UTILITIES --- */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--patina-mid) 0%, var(--copper-mid) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .bg-gradient-soft {
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(153, 246, 228, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(253, 230, 138, 0.2) 0%, transparent 40%);
+            background-color: var(--bg-page);
+        }
+
+        /* --- COMPONENTS --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 24px;
+            height: 44px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: none;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--patina-dark) 0%, var(--patina-mid) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(19, 78, 74, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(19, 78, 74, 0.4);
+            background: linear-gradient(135deg, var(--patina-mid) 0%, var(--patina-dark) 100%);
+        }
+
+        .btn-outline {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            backdrop-filter: blur(4px);
+        }
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: white;
+        }
+
+        .card {
+            background: var(--surface-glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--surface-glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--patina-mid); 
+        }
+
+        /* --- HEADER --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 24px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background: #0F3D39; 
+            color: white;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #CCFBF1;
+            flex-shrink: 0;
+        }
+        
+        .logo .material-symbols-rounded {
+            background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav ul { display: flex; gap: 30px; list-style: none; }
+        
+        nav a {
+            font-size: 0.95rem;
+            font-weight: 400;
+            color: rgba(255,255,255,0.7);
+            position: relative;
+        }
+
+        nav a:hover { color: #FCD34D; }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #FCD34D;
+            transition: width 0.3s;
+        }
+        nav a:hover::after { width: 100%; }
+
+        header .btn-primary {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: none;
+            height: 38px;
+            font-size: 0.85rem;
+            padding: 0 16px;
+        }
+        header .btn-primary:hover {
+            background: #CCFBF1;
+            color: var(--patina-dark);
+        }
+
+        .header-actions {
+            display: flex; 
+            gap: 10px;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: calc(100vh - 72px);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 24px;
+            background: 
+                radial-gradient(at 0% 0%, rgba(153, 246, 228, 0.4) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(253, 230, 138, 0.3) 0px, transparent 50%),
+                linear-gradient(180deg, #F2F7F6 0%, #E6FFFA 100%);
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            max-width: 950px;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            color: var(--patina-dark);
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            max-width: 680px;
+            color: var(--text-muted);
+            font-weight: 300;
+            margin-bottom: 40px;
+        }
+        
+        .hero-btns {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            animation: bounce 2s infinite;
+            color: var(--patina-mid);
+            opacity: 0.6;
+            cursor: pointer;
+            background: white;
+            border-radius: 50%;
+            padding: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        /* --- FEATURES --- */
+        .features {
+            padding: 80px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header h2 { font-size: 2.5rem; margin-bottom: 16px; color: var(--patina-dark); }
+        .section-header p { font-size: 1.1rem; color: var(--text-muted); }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #CCFBF1 0%, #99F6E4 100%);
+            color: var(--patina-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        /* --- AI SECTION --- */
+        .ai-section-wrapper {
+            background: linear-gradient(180deg, #F0FDFA 0%, #E6FFFA 100%);
+            padding: 60px 24px;
+        }
+
+        .ai-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--surface-glass);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(19, 78, 74, 0.08);
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .ai-text {
+            flex: 1;
+            padding: 60px;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .ai-demo {
+            flex: 1;
+            background: linear-gradient(135deg, var(--patina-dark) 0%, var(--patina-mid) 100%);
+            padding: 60px;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .chat-bubble {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            color: #CCFBF1;
+            padding: 14px 20px;
+            border-radius: 18px 18px 18px 4px;
+            font-size: 0.95rem;
+            width: fit-content;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .chat-bubble.bot {
+            background: #F0FDFA; 
+            color: var(--patina-dark);
+            border-radius: 18px 18px 4px 18px;
+            margin-left: auto;
+            font-weight: 500;
+        }
+
+        /* --- TRAINING SECTION --- */
+        .training-card {
+            width: 100%;
+            max-width: 380px; 
+            text-align: left; 
+            padding: 20px;
+        }
+
+        .training-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .video-thumbnail {
+            width: 100%;
+            height: 200px;
+            border-radius: 14px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .video-thumbnail img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .card:hover .video-thumbnail img { transform: scale(1.05); }
+        
+        .play-btn {
+            position: absolute;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 50px; height: 50px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--copper-mid);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            opacity: 0.8;
+            transition: 0.3s;
+        }
+        .card:hover .play-btn { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #042F2E; 
+            color: white;
+            padding: 60px 24px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(153, 246, 228, 0.3), transparent);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        
+        .footer-col h4 {
+            color: #5EEAD4;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 12px; }
+        
+        .footer-col a {
+            color: #99F6E4; 
+            font-size: 0.95rem;
+            opacity: 0.7;
+        }
+        .footer-col a:hover { opacity: 1; color: white; }
+        
+        .created-by {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+        }
+        
+        .team-names {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .team-member {
+            background: rgba(255,255,255,0.05);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #FCD34D;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* --- VIDEO MODAL STYLES --- */
+        .video-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px; /* Padding for mobile edges */
+        }
+
+        .video-modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            background: #000;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            line-height: 0;
+            overflow: hidden; /* Contains video corners */
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for better visibility on mobile */
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: background 0.2s;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--patina-light);
+        }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.8rem; }
+            .hero p { font-size: 1.1rem; }
+            nav { display: none; }
+            .ai-container { flex-direction: column; }
+            .ai-text, .ai-demo { padding: 40px 24px; min-width: 100%; }
+            .hero-btns { flex-direction: column; width: 100%; }
+            .hero-btns .btn { width: 100%; }
+            .footer-content { flex-direction: column; gap: 30px; }
+            
+            /* Modal adjustments for small screens */
+            .modal-content { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <span class="material-symbols-rounded">school</span>
+            Vistran
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#ai">AI Assistant</a></li>
+                <li><a href="#training">Training</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <a href="adminlogin.jsp" class="btn btn-primary">Admin</a>
+            <a href="trainerlogin.html" class="btn btn-primary">Trainer</a>
+            <a href="login.html" class="btn btn-primary">Teacher</a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div style="width: 80px; height: 80px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 2px solid #FCD34D;">
+            <span class="material-symbols-rounded" style="font-size: 40px; color: var(--copper-mid);">auto_stories</span>
+        </div>
+        
+        <h1>Intelligent Administration.<br><span class="text-gradient">Empowered Educators.</span></h1>
+        
+        <p>A unified platform connecting school management, teacher growth, and AI-driven insights with the wisdom of experience.</p>
+        
+        <div class="hero-btns">
+            <a href="adminlogin.jsp" class="btn btn-primary">Get Started Now</a>
+            <button class="btn btn-outline" style="background: white; color: var(--patina-dark); border: 1px solid rgba(19, 78, 74, 0.2);" onclick="openDemoModal()">
+                <span class="material-symbols-rounded">play_circle</span> View Demo
+            </button>
+        </div>
+
+        <a href="#features" class="scroll-indicator">
+            <span class="material-symbols-rounded">keyboard_arrow_down</span>
+        </a>
+    </section>
+
+    <section id="features" class="features">
+        <div class="section-header">
+            <h2>Everything you need to run your campus</h2>
+            <p>From attendance tracking to performance analytics, handled beautifully.</p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="feature-icon"><span class="material-symbols-rounded">bar_chart</span></div>
+                <h3>Performance Analytics</h3>
+                <p style="color:var(--text-muted); margin-top:10px;">Visualize student and class performance with dynamic charts. Track trends over time effortlessly.</p>
+            </div>
+
+            <div class="card">
+                <div class="feature-icon"><span class="material-symbols-rounded">class</span></div>
+                <h3>Class Management</h3>
+                <p style="color:var(--text-muted); margin-top:10px;">Seamless navigation between Class 1 to Class 10. Manage student lists and specific class issues.</p>
+            </div>
+
+            <div class="card">
+                <div class="feature-icon"><span class="material-symbols-rounded">campaign</span></div>
+                <h3>Digital Notice Board</h3>
+                <p style="color:var(--text-muted); margin-top:10px;">Post and manage school-wide or class-specific notices instantly. Keep everyone aligned.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="ai-section-wrapper" id="ai">
+        <div class="ai-container">
+            <div class="ai-text">
+                <span style="color: var(--copper-mid); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; font-size: 0.85rem; margin-bottom: 10px; display:block;">Powered by AI</span>
+                <h2 style="font-size: 2.5rem; margin-bottom: 20px; color: var(--patina-dark);">Your Intelligent Assistant</h2>
+                <p style="color: var(--text-muted); margin-bottom: 30px;">
+                    Vistran integrates a powerful AI assistant directly into the admin panel. Solve coding errors, draft notices, or analyze data without leaving the platform.
+                </p>
+                <a href="chat.html" class="btn btn-primary" style="width: fit-content;">
+                    <span class="material-symbols-rounded">auto_awesome</span> Try AI Assistant
+                </a>
+            </div>
+            <div class="ai-demo">
+                <div class="chat-bubble">How can I improve class attendance in Grade 5?</div>
+                <div class="chat-bubble bot">Based on the data, Grade 5 attendance drops on Fridays. Consider scheduling engaging activities or quizzes on Friday mornings.</div>
+                <div class="chat-bubble">Draft a notice for the Science Fair.</div>
+                <div class="chat-bubble bot">Sure! "Dear Students, The Annual Science Fair will be held on..."</div>
+            </div>
+        </div>
+    </div>
+
+    <section id="training" class="features" style="text-align: center;">
+        <div class="section-header">
+            <h2>Teacher Training Portal</h2>
+            <p>Continuous professional development with our integrated video portal.</p>
+        </div>
+        
+        <div class="training-grid">
+            <div class="card training-card">
+                <div class="video-thumbnail">
+                     <img src="https://placehold.co/380x200/ccfbf1/134e4a?text=Curriculum+Update" alt="Training Video">
+                     <div class="play-btn"><span class="material-symbols-rounded">play_arrow</span></div>
+                </div>
+                <h3>Curriculum Updates</h3>
+                <p style="color:var(--text-muted); font-size:0.9rem; margin-top:5px;">Video modules explaining new syllabus changes.</p>
+            </div>
+            
+            <div class="card training-card">
+                <div class="video-thumbnail">
+                     <img src="https://placehold.co/380x200/ccfbf1/134e4a?text=Classroom+Mgmt" alt="Training Video">
+                     <div class="play-btn"><span class="material-symbols-rounded">play_arrow</span></div>
+                </div>
+                <h3>Classroom Management</h3>
+                <p style="color:var(--text-muted); font-size:0.9rem; margin-top:5px;">Expert tips on managing large classes effectively.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-col" style="max-width: 300px;">
+                <div class="logo" style="margin-bottom: 20px; color: white;">
+                    <span class="material-symbols-rounded" style="color: #99F6E4;">school</span> Vistran
+                </div>
+                <p style="opacity: 0.7; font-size: 0.9rem; line-height: 1.6;">Empowering educators and administrators with the intelligent tools they need to succeed in the modern era.</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#">Training Portal</a></li>
+                    <li><a href="#">AI Tools</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Admin</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="created-by">
+            <p style="opacity: 0.5; font-size: 0.85rem; margin-bottom: 10px;">Crafted with precision by</p>
+            <div class="team-names">
+                <span class="team-member">Om Chaudhari</span> 
+                <span class="team-member">Aisha Inamdar</span>
+                <span class="team-member">Ayush Yadav</span>
+                <span class="team-member">Siddhi Bahutule</span>
+            </div>
+            <div style="margin-top: 30px; opacity: 0.4; font-size: 0.8rem;">
+                &copy; 2026 Vistran. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <div id="demoModal" class="video-modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeDemoModal()" aria-label="Close demo video">&times;</button>
+            <video id="demoVideo" width="100%" controls controlsList="nodownload">
+                <source src="videos/demo.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        function openDemoModal() {
+            const modal = document.getElementById('demoModal');
+            const video = document.getElementById('demoVideo');
+            if(modal && video) {
+                modal.classList.add('show');
+                // Use a promise to handle play() errors (common in some browsers)
+                var playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log("Auto-play prevented by browser policy:", error);
+                    });
+                }
+            }
+        }
+
+        function closeDemoModal() {
+            const modal = document.getElementById('demoModal');
+            const video = document.getElementById('demoVideo');
+            if(modal && video) {
+                modal.classList.remove('show');
+                video.pause();
+                video.currentTime = 0; 
+            }
+        }
+
+        // Close modal if user clicks outside the content area
+        window.onclick = function(event) {
+            const modal = document.getElementById('demoModal');
+            if (event.target == modal) {
+                closeDemoModal();
+            }
+        }
+    </script>
+
+</body>
+</html>

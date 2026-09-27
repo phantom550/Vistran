@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainer Signup - Vistran</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
+
+    <style>
+        /* --- Patina & Bronze Theme --- */
+        :root {
+            --patina-dark: #134E4A;
+            --patina-mid: #2D7A7B;
+            --patina-light: #99F6E4;
+            --copper-dark: #78350F;
+            --copper-mid: #B45309;
+            --copper-light: #F59E0B;
+            --bg-page: #F2F7F6;
+            --surface-glass: rgba(255, 255, 255, 0.95);
+            --surface-border: rgba(45, 122, 123, 0.15);
+            --text-main: #132A28;
+            --text-muted: #4A6360;
+            --elevation-2: 0px 4px 20px rgba(19, 78, 74, 0.15);
+        }
+
+        * { box-sizing: border-box; transition: all 0.2s ease; }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-page);
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(153, 246, 228, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(253, 230, 138, 0.2) 0%, transparent 40%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Container */
+        .register-container {
+            width: 100%; max-width: 450px;
+            background: var(--surface-glass);
+            padding: 32px 28px;
+            border-radius: 24px;
+            box-shadow: var(--elevation-2);
+            border: 1px solid var(--surface-border);
+            backdrop-filter: blur(12px);
+        }
+
+        /* Header */
+        .header { text-align: center; margin-bottom: 24px; }
+
+        .icon-container {
+            width: 56px; height: 56px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            background: white;
+            color: var(--patina-mid);
+            border: 2px solid var(--patina-light);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .header h1 {
+            margin: 0; font-size: 1.8rem; font-weight: 700;
+            color: var(--patina-dark);
+        }
+
+        .header p { margin-top: 6px; font-size: 0.95rem; color: var(--text-muted); }
+
+        /* Inputs */
+        .input-group {
+            position: relative; margin-bottom: 16px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 8px;
+            border: 1px solid rgba(45, 122, 123, 0.2);
+        }
+
+        .input-group input {
+            width: 100%; padding: 22px 16px 8px;
+            border: none; background: transparent;
+            font-size: 1rem; outline: none; color: var(--text-main);
+            border-radius: 8px;
+        }
+
+        .input-group label {
+            position: absolute; top: 50%; left: 16px;
+            transform: translateY(-50%);
+            font-size: 0.95rem; color: var(--text-muted);
+            pointer-events: none; transition: 0.2s ease all;
+        }
+
+        .input-group input:focus ~ label,
+        .input-group input:not(:placeholder-shown) ~ label {
+            top: 8px; font-size: 0.75rem;
+            color: var(--patina-mid); font-weight: 600;
+        }
+
+        .input-group:focus-within {
+            border-color: var(--patina-mid); background: white;
+            box-shadow: 0 0 0 3px rgba(45, 122, 123, 0.1);
+        }
+
+        /* Radio Grid */
+        fieldset {
+            border: 1px solid var(--surface-border);
+            margin-bottom: 24px; background: rgba(255, 255, 255, 0.4);
+            padding: 14px; border-radius: 12px;
+        }
+
+        legend {
+            font-size: 0.8rem; color: var(--patina-dark);
+            font-weight: 600; text-transform: uppercase; padding: 0 8px;
+        }
+
+        .radio-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 5px;
+        }
+
+        .radio-item { position: relative; }
+        .radio-item input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+        .radio-visual {
+            padding: 10px; text-align: center;
+            font-size: 0.9rem; border-radius: 8px;
+            border: 1px solid var(--surface-border);
+            color: var(--text-muted); background: white;
+        }
+
+        .radio-item input:checked + .radio-visual {
+            background: var(--patina-mid); color: white;
+            border-color: var(--patina-mid); font-weight: 600;
+            box-shadow: 0 4px 8px rgba(45, 122, 123, 0.2);
+        }
+
+        /* Buttons */
+        .signup-button {
+            width: 100%; height: 50px;
+            background: linear-gradient(135deg, var(--patina-dark) 0%, var(--patina-mid) 100%);
+            color: white; border: none; border-radius: 100px;
+            font-size: 1rem; font-weight: 600;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 4px 15px rgba(19, 78, 74, 0.2); margin-bottom: 20px;
+        }
+
+        .signup-button:hover {
+            background: linear-gradient(135deg, var(--patina-mid) 0%, var(--patina-dark) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(19, 78, 74, 0.3);
+        }
+
+        .back-link { text-align: center; margin-bottom: 10px; }
+        .back-link a {
+            color: var(--copper-mid); text-decoration: none;
+            font-size: 0.9rem; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+        .back-link a:hover { text-decoration: underline; }
+
+        @media (min-width: 480px) {
+            .radio-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="register-container">
+        <div class="header">
+            <div class="icon-container">
+                <span class="material-symbols-rounded" style="font-size: 32px;">person_add</span>
+            </div>
+            <h1>New Trainer</h1>
+            <p>Create your Vistran account</p>
+        </div>
+
+        <form class="register-form" action="TrainerSignupServlet" method="post">
+            <div class="input-group">
+                <input type="text" id="trainer_id" name="trainer_id" placeholder=" " required>
+                <label for="trainer_id">Trainer ID</label>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="trainer_name" name="trainer_name" placeholder=" " required>
+                <label for="trainer_name">Trainer Name</label>
+            </div>
+
+            <div class="input-group">
+                <input type="email" id="email" name="email" placeholder=" " required>
+                <label for="email">Email Address</label>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="designation" name="designation" placeholder=" " required>
+                <label for="designation">Designation</label>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="subject_id" name="subject_id" placeholder=" " required>
+                <label for="subject_id">Subject ID</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder=" " required>
+                <label for="password">Password</label>
+            </div>
+
+            <fieldset>
+                <legend>Select Subject</legend>
+                <div class="radio-grid">
+                    <label class="radio-item">
+                        <input type="radio" name="subject" value="math">
+                        <div class="radio-visual">Math</div>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="subject" value="science">
+                        <div class="radio-visual">Science</div>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="subject" value="english">
+                        <div class="radio-visual">English</div>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="subject" value="hindi">
+                        <div class="radio-visual">Hindi</div>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="subject" value="marathi">
+                        <div class="radio-visual">Marathi</div>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="subject" value="sst">
+                        <div class="radio-visual">SST</div>
+                    </label>
+                </div>
+            </fieldset>
+
+            <button type="submit" class="signup-button">
+                Sign Up
+                <span class="material-symbols-rounded" style="font-size: 20px;">check</span>
+            </button>
+
+            <div class="back-link">
+                <a href="trainerlogin.html">
+                    <span class="material-symbols-rounded" style="font-size: 18px;">arrow_back</span>
+                    Back to Login
+                </a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trainer Login - Vistran</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
+
+    <style>
+        /* --- Patina & Bronze Theme Variables --- */
+        :root {
+            /* Patina (Teals/Greens) */
+            --patina-dark: #134E4A;
+            --patina-mid: #2D7A7B;
+            --patina-light: #99F6E4;
+            
+            /* Bronze/Copper */
+            --copper-dark: #78350F;
+            --copper-mid: #B45309;
+            --copper-light: #F59E0B;
+            
+            /* Surface & Text */
+            --bg-page: #F2F7F6;
+            --surface-glass: rgba(255, 255, 255, 0.95);
+            --surface-border: rgba(45, 122, 123, 0.15);
+            --text-main: #132A28;
+            --text-muted: #4A6360;
+            
+            --elevation-2: 0px 4px 20px rgba(19, 78, 74, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(153, 246, 228, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(253, 230, 138, 0.2) 0%, transparent 40%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        /* Card */
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            background: var(--surface-glass);
+            padding: 32px 28px;
+            border-radius: 24px;
+            box-shadow: var(--elevation-2);
+            border: 1px solid var(--surface-border);
+            backdrop-filter: blur(12px);
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .icon-container {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            background: white;
+            color: var(--copper-mid);
+            border: 2px solid var(--copper-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+            /* Gradient Text: Patina to Copper */
+            background: linear-gradient(135deg, var(--patina-mid) 0%, var(--copper-mid) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            margin-top: 6px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        /* Inputs */
+        .input-group {
+            position: relative;
+            margin-bottom: 18px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 8px;
+            border: 1px solid rgba(45, 122, 123, 0.2);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 24px 16px 8px;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            outline: none;
+            color: var(--text-main);
+            border-radius: 8px;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            transform: translateY(-50%);
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            pointer-events: none;
+            transition: 0.2s ease all;
+        }
+
+        .input-group input:focus ~ label,
+        .input-group input:not(:placeholder-shown) ~ label {
+            top: 10px;
+            font-size: 0.75rem;
+            color: var(--patina-mid);
+            font-weight: 600;
+        }
+        
+        .input-group:focus-within {
+            border-color: var(--patina-mid);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(45, 122, 123, 0.1);
+        }
+
+        /* Subject Section */
+        fieldset {
+            margin: 24px 0;
+            padding: 14px;
+            border: 1px solid var(--surface-border);
+            border-radius: 14px;
+            background: rgba(255,255,255,0.4);
+        }
+
+        legend {
+            padding: 0 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--patina-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Mobile Friendly Grid */
+        .radio-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 Columns for mobile ease */
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .radio-item {
+            position: relative;
+        }
+
+        .radio-item input {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .radio-visual {
+            padding: 10px 4px;
+            text-align: center;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            border: 1px solid var(--surface-border);
+            color: var(--text-muted);
+            background: white;
+        }
+
+        .radio-item input:checked + .radio-visual {
+            background: var(--patina-mid);
+            color: white;
+            font-weight: 600;
+            border-color: var(--patina-mid);
+            box-shadow: 0 4px 8px rgba(45, 122, 123, 0.2);
+        }
+
+        /* Button */
+        .login-button {
+            width: 100%;
+            height: 50px;
+            margin-top: 12px;
+            border: none;
+            border-radius: 100px;
+            background: linear-gradient(135deg, var(--patina-dark) 0%, var(--patina-mid) 100%);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(19, 78, 74, 0.2);
+        }
+
+        .login-button:hover {
+            background: linear-gradient(135deg, var(--patina-mid) 0%, var(--patina-dark) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(19, 78, 74, 0.3);
+        }
+
+        /* Footer */
+        .social-login {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .social-login a {
+            color: var(--copper-mid);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .social-login a:hover { text-decoration: underline; }
+
+        /* Media Queries */
+        @media (min-width: 480px) {
+            .radio-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-container">
+    <div class="header">
+        <div class="icon-container">
+            <span class="material-symbols-rounded" style="font-size: 32px;">school</span>
+        </div>
+        <h1>Vistran</h1>
+        <p>Welcome back, Trainer</p>
+    </div>
+
+    <form action="TrainerLoginServlet" method="post">
+
+        <div class="input-group">
+            <input list="school-list" id="school_name" name="school_name" placeholder="s.m.joshi" required />
+            <label for="school_name">Search School Name</label>
+            <datalist id="school-list">
+            <option value="s.m.joshi">
+                <option value="Greenwood High School">
+                <option value="St. Xavier's International">
+                <option value="Delhi Public School">
+                <option value="Ryan International">
+                <option value="Sunshine Academy">
+            </datalist>
+        </div>
+
+        <div class="input-group">
+            <input type="text" id="subject_id" name="subject_id" placeholder="101" required />
+            <label for="subject_id">Subject ID</label>
+        </div>
+
+        <div class="input-group">
+            <input type="password" id="password" name="password" placeholder="123" required />
+            <label for="password">Password</label>
+        </div>
+
+        <fieldset>
+            <legend>Select Subject</legend>
+            <div class="radio-grid">
+                <label class="radio-item">
+                    <input type="radio" name="subject" value="math" checked>
+                    <div class="radio-visual">Math</div>
+                </label>
+                <label class="radio-item">
+                    <input type="radio" name="subject" value="science">
+                    <div class="radio-visual">Science</div>
+                </label>
+                <label class="radio-item">
+                    <input type="radio" name="subject" value="english">
+                    <div class="radio-visual">English</div>
+                </label>
+                <label class="radio-item">
+                    <input type="radio" name="subject" value="hindi">
+                    <div class="radio-visual">Hindi</div>
+                </label>
+                <label class="radio-item">
+                    <input type="radio" name="subject" value="marathi">
+                    <div class="radio-visual">Marathi</div>
+                </label>
+                <label class="radio-item">
+                    <input type="radio" name="subject" value="sst">
+                    <div class="radio-visual">SST</div>
+                </label>
+            </div>
+        </fieldset>
+
+        <button type="submit" class="login-button">
+            Login
+            <span class="material-symbols-rounded">arrow_forward</span>
+        </button>
+
+        <div class="social-login">
+            New to Vistran? <a href="trainersignup.html">Create Account</a>
+        </div>
+
+    </form>
+</div>
+
+</body>
+</html>
