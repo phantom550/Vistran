@@ -63,7 +63,6 @@ public class SignupServlet extends HttpServlet {
             }
 
             // INSERT: Safe to create the new user
-            // Explicitly naming columns is required in PostgreSQL to avoid ordering errors
             String sql = "INSERT INTO login (subject_id, password, subject, school_id, school_name) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement st = con.prepareStatement(sql)) {
                 st.setInt(1, id);
@@ -78,7 +77,7 @@ public class SignupServlet extends HttpServlet {
             res.sendRedirect("login.html");
 
         } catch (Exception e) {
-            e.printStackTrace(); // This prints the exact error to Koyeb's logs
+            e.printStackTrace(); 
             res.getWriter().println("Database Error: " + e.getMessage());
         }
     }
